@@ -25,21 +25,21 @@
     "level": "basic",
     "title": "Text Color Change",
     "description": "Change the color of a paragraph when a button is clicked.",
-    "image": "https://source.unsplash.com/1200x500/?text,color,ui,design"
+    "image": "/4.png"
   },
   {
     "id": 5,
     "level": "basic",
     "title": "Simple Alert",
     "description": "Show a popup message when a button is clicked.",
-    "image": "https://source.unsplash.com/1200x500/?alert,modal,ui"
+    "image": "/5.png"
   },
   {
     "id": 6,
     "level": "basic",
     "title": "Hide and Show Text",
     "description": "Create a button that hides and shows a text section.",
-    "image": "https://source.unsplash.com/1200x500/?toggle,ui,interaction"
+    "image": "/6.png"
   },
   {
     "id": 7,
