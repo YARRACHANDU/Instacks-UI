@@ -1,7 +1,7 @@
 "use client";
 
 import Editor from "@monaco-editor/react";
-import { getLang, getIcon } from "../../panel/page";
+import { getLang, getIcon } from "../../panel/[...id]/page";
 
 interface Props {
   viewMode: "editor" | "preview";

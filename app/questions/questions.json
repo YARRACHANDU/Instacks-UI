@@ -1,0 +1,254 @@
+[
+  {
+    "id": 1,
+    "level": "basic",
+    "title": "Center Text on Page",
+    "description": "In this task, you will create a simple page layout where a single text element must be placed exactly at the center of the screen. The text should remain centered even when the screen size changes.",
+    "problemOverview": "You are given a blank page with no predefined layout. The goal is to position one text element so that it appears centered both horizontally and vertically on the screen at all times.",
+    "objectives": [
+      "Create a full-screen layout",
+      "Place text at the center of the screen"
+    ],
+    "requirements": [
+      "The text must be centered horizontally",
+      "The text must be centered vertically",
+      "The layout must adapt to different screen sizes"
+    ],
+    "constraints": [
+      "Do not use fixed margins for positioning",
+      "The solution must work on all screen sizes"
+    ],
+    "expectedOutcome": "The text remains perfectly centered on the page regardless of screen width or height.",
+    "attributes": [
+      "Layout alignment",
+      "Viewport usage",
+      "Visual positioning"
+    ]
+  },
+  {
+    "id": 2,
+    "level": "basic",
+    "title": "Styled Button",
+    "description": "In this task, you will design a button that is visually clear and easy to interact with. The button should look clickable and well-spaced.",
+    "problemOverview": "You are given a page where a basic button exists without styling. Your task is to enhance the button so it looks visually appealing and user-friendly.",
+    "objectives": [
+      "Improve button appearance",
+      "Make the button easy to click"
+    ],
+    "requirements": [
+      "The button must have padding",
+      "The button must have rounded corners",
+      "The text inside the button must be readable"
+    ],
+    "constraints": [
+      "Do not add extra elements",
+      "Style only the existing button"
+    ],
+    "expectedOutcome": "The button appears clean, clickable, and visually distinct from the background.",
+    "attributes": [
+      "Button styling",
+      "Spacing awareness",
+      "Visual clarity"
+    ]
+  },
+  {
+    "id": 3,
+    "level": "medium",
+    "title": "Background Color Toggle",
+    "description": "In this task, you will allow users to switch the background color of the page using a button. Each click should alternate between two colors.",
+    "problemOverview": "You are given a page with a button, but clicking it does nothing. The task is to implement logic that changes the page background color when the button is clicked.",
+    "objectives": [
+      "Handle button interaction",
+      "Switch background colors dynamically"
+    ],
+    "requirements": [
+      "At least two background colors",
+      "Background color changes on button click"
+    ],
+    "constraints": [
+      "Do not refresh the page",
+      "Do not modify existing layout structure"
+    ],
+    "expectedOutcome": "Each button click alternates the page background color smoothly.",
+    "attributes": [
+      "State toggling",
+      "Dynamic styling",
+      "User interaction handling"
+    ]
+  },
+  {
+    "id": 4,
+    "level": "medium",
+    "title": "Character Counter",
+    "description": "In this task, you will track how many characters a user types into an input field and display the count in real time.",
+    "problemOverview": "You are given an input field, but there is no feedback for the user while typing. Your task is to show a live character count as text is entered.",
+    "objectives": [
+      "Track user input",
+      "Display live feedback"
+    ],
+    "requirements": [
+      "Character count must update as the user types",
+      "Count must be visible near the input field"
+    ],
+    "constraints": [
+      "Do not refresh the page",
+      "Do not use external libraries"
+    ],
+    "expectedOutcome": "The character count updates instantly with every keystroke.",
+    "attributes": [
+      "Input tracking",
+      "Real-time updates",
+      "User feedback"
+    ]
+  },
+  {
+    "id": 5,
+    "level": "medium",
+    "title": "Dropdown Toggle",
+    "description": "In this task, you will create a dropdown menu that opens and closes when the user interacts with it.",
+    "problemOverview": "You are given a dropdown structure that is always visible. Your task is to control its visibility based on user interaction.",
+    "objectives": [
+      "Control dropdown visibility",
+      "Handle toggle behavior"
+    ],
+    "requirements": [
+      "Dropdown should be hidden by default",
+      "Clicking the button should show or hide the dropdown"
+    ],
+    "constraints": [
+      "Do not modify dropdown content",
+      "Use only the existing button"
+    ],
+    "expectedOutcome": "The dropdown opens and closes smoothly when the user clicks the toggle button.",
+    "attributes": [
+      "Visibility control",
+      "Conditional rendering",
+      "UI state management"
+    ]
+  },
+  {
+    "id": 6,
+    "level": "hard",
+    "title": "Todo List",
+    "description": "In this task, you will build a simple task management system where users can add and remove items from a list.",
+    "problemOverview": "You are given an input field and a button, but the task list functionality is missing. Your job is to implement logic to manage tasks dynamically.",
+    "objectives": [
+      "Add new tasks",
+      "Remove existing tasks"
+    ],
+    "requirements": [
+      "Tasks must appear in a list",
+      "Each task must have a remove option"
+    ],
+    "constraints": [
+      "Do not refresh the page",
+      "Do not use external libraries"
+    ],
+    "expectedOutcome": "Users can add tasks to the list and remove them individually.",
+    "attributes": [
+      "Dynamic list handling",
+      "User input processing",
+      "State management"
+    ]
+  },
+  {
+    "id": 7,
+    "level": "hard",
+    "title": "Modal Popup",
+    "description": "In this task, you will implement a modal window that appears over the page content and can be closed by the user.",
+    "problemOverview": "You are given a modal layout, but it does not open or close. Your task is to control its visibility through user interaction.",
+    "objectives": [
+      "Open modal on button click",
+      "Close modal when requested"
+    ],
+    "requirements": [
+      "Modal should appear above the page",
+      "Modal should close when the close button is clicked"
+    ],
+    "constraints": [
+      "Do not modify modal styles",
+      "Use existing modal structure"
+    ],
+    "expectedOutcome": "The modal opens and closes correctly without affecting the page layout.",
+    "attributes": [
+      "Overlay handling",
+      "Focus management",
+      "UI layering"
+    ]
+  },
+  {
+    "id": 8,
+    "level": "hard",
+    "title": "Search Filter",
+    "description": "In this task, you will allow users to filter a list of items by typing into a search field.",
+    "problemOverview": "You are given a list and a search input, but the filtering logic is missing. Your task is to update the list dynamically based on the search input.",
+    "objectives": [
+      "Capture search input",
+      "Filter list items dynamically"
+    ],
+    "requirements": [
+      "List updates as the user types",
+      "Only matching items should be displayed"
+    ],
+    "constraints": [
+      "Do not refresh the page",
+      "Filtering must happen instantly"
+    ],
+    "expectedOutcome": "The list displays only items that match the search input.",
+    "attributes": [
+      "Filtering logic",
+      "Live data updates",
+      "String matching"
+    ]
+  },
+  {
+    "id": 9,
+    "level": "hard",
+    "title": "Tabs Component",
+    "description": "In this task, you will create a tabbed interface where each tab displays different content.",
+    "problemOverview": "You are given multiple content sections, but they are all visible at once. Your task is to show only the active tab content.",
+    "objectives": [
+      "Switch content based on active tab",
+      "Highlight the active tab"
+    ],
+    "requirements": [
+      "Only one tab content visible at a time",
+      "Active tab must be visually distinct"
+    ],
+    "constraints": [
+      "Do not remove any content sections",
+      "Do not refresh the page"
+    ],
+    "expectedOutcome": "Clicking on a tab displays its content and hides the others.",
+    "attributes": [
+      "State-driven UI",
+      "Conditional rendering",
+      "Navigation logic"
+    ]
+  },
+  {
+    "id": 10,
+    "level": "hard",
+    "title": "Image Slider",
+    "description": "In this task, you will create an image slider that allows users to navigate through images one at a time.",
+    "problemOverview": "You are given multiple images, but they are displayed all at once. Your task is to show only one image and allow navigation.",
+    "objectives": [
+      "Display one image at a time",
+      "Navigate between images"
+    ],
+    "requirements": [
+      "Next and previous controls",
+      "Image changes on button click"
+    ],
+    "constraints": [
+      "Do not reload the page",
+      "Do not duplicate images"
+    ],
+    "expectedOutcome": "Users can smoothly navigate through images using the provided controls.",
+    "attributes": [
+      "Index tracking",
+      "Navigation logic",
+      "Visual transitions"
+    ]
+  }
+]

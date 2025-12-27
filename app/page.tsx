@@ -1,9 +1,13 @@
 "use client";
 import VideoPlayer from "./components/VideoPlayer";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white dark:bg-white text-white dark:text-black transition-colors duration-500">
+    <div>
+      <Navbar />
+      <main className="min-h-screen bg-white dark:bg-white text-white dark:text-black transition-colors duration-500 pt-6">
 
       {/* HERO SECTION */}
       <section className="flex items-center px-6 py-16">
@@ -237,5 +241,7 @@ export default function Home() {
 
 
     </main>
+      <Footer/>
+    </div>
   );
 }

@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import TopBar from "../components/panelcomponents/TopBar";
-import MobileViewToggle from "../components/panelcomponents/MobileViewToggle";
-import FileExplorer from "../components/panelcomponents/FileExplorer";
-import Tabs from "../components/panelcomponents/Tabs";
-import EditorPane from "../components/panelcomponents/EditorPane";
-import PreviewPane from "../components/panelcomponents/PreviewPane";
-import ConsolePanel from "../components/panelcomponents/ConsolePanel";
+import TopBar from "../../components/panelcomponents/TopBar";
+import MobileViewToggle from "../../components/panelcomponents/MobileViewToggle";
+import Tabs from "../../components/panelcomponents/Tabs";
+import EditorPane from "../../components/panelcomponents/EditorPane";
+import PreviewPane from "../../components/panelcomponents/PreviewPane";
+import ConsolePanel from "../../components/panelcomponents/ConsolePanel";
+import Questions from "../../components/panelcomponents/questionpanel"
+import { useParams } from "next/navigation";
+
 
 export const getLang = (f: string) =>
   f.endsWith(".html") ? "html" : f.endsWith(".css") ? "css" : "javascript";
@@ -19,6 +21,17 @@ export default function InstacksEditor() {
   const [files, setFiles] = useState([{ name: "index.html" }, { name: "style.css" }, { name: "script.js" }]);
   const [activeFile, setActiveFile] = useState("index.html");
   const [isFileExplorerOpen, setIsFileExplorerOpen] = useState(false);
+  const [questionId, setQuestionId] = useState<number | null>(null);
+  
+  const params = useParams();
+
+  useEffect(() => {
+    if (params?.id) {
+      const id = Number(Array.isArray(params.id) ? params.id[0] : params.id);
+      setQuestionId(id);
+      console.log("Question ID:", id);
+    }
+  }, [params]);
 
   const [contents, setContents] = useState<Record<string, string>>({
     "index.html": "<h1>Hello Online Editor 🚀</h1>",
@@ -94,16 +107,8 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
       <MobileViewToggle viewMode={viewMode} setViewMode={setViewMode} />
 
       <div className="flex flex-1 overflow-hidden">
-        <FileExplorer
-          files={files}
-          activeFile={activeFile}
-          setActiveFile={setActiveFile}
-          isOpen={isFileExplorerOpen}
-          setIsOpen={setIsFileExplorerOpen}
-          addFile={addFile}
-          deleteFile={deleteFile}
-        />
-
+        <Questions questionId={questionId ?? 0}/>
+      
         <div className="flex-1 flex flex-col overflow-hidden">
           <Tabs files={files} activeFile={activeFile} setActiveFile={setActiveFile} />
 

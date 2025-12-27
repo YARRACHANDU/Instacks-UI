@@ -1,7 +1,5 @@
 import "./globals.css";
 import { ThemeProvider } from "./components/ThemeProvider";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 
 export const metadata = {
   title: "AI Coding Practice",
@@ -17,9 +15,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="transition-colors duration-500 min-h-screen bg-white dark:bg-black text-black dark:text-white">
         <ThemeProvider>
-          <Navbar />
-          <div className="pt-20">{children}</div>
-          <Footer />
+          <div >{children}</div>
         </ThemeProvider>
       </body>
     </html>
