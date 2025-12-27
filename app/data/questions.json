@@ -4,7 +4,7 @@
     "level": "basic",
     "title": "Center Text on Page",
     "description": "Create a page that displays a text message centered both vertically and horizontally.",
-    "image": "https://source.unsplash.com/1200x500/?minimal,centered,text,ui"
+    "image": "/text.jpg"
   },
   {
     "id": 2,
@@ -18,7 +18,7 @@
     "level": "basic",
     "title": "Image Display",
     "description": "Display an image that adjusts its size to fit inside a container.",
-    "image": "https://source.unsplash.com/1200x500/?image,layout,css,web"
+    "image": "/image.jpg"
   },
   {
     "id": 4,

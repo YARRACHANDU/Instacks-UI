@@ -43,7 +43,7 @@ const Navbar = () => {
       {/* Mobile Dropdown */}
       {open && (
         <ul className="md:hidden flex flex-col items-center gap-6 bg-white text-black py-6 shadow-md border-t">
-          <li><Link href="#features" onClick={() => setOpen(false)}>Problems</Link></li>
+          <li><Link href="/problems" onClick={() => setOpen(false)}>Problems</Link></li>
           <li><Link href="#about-us" onClick={() => setOpen(false)}>About Us</Link></li>
           <li><Link href="#contact" onClick={() => setOpen(false)}>Contact Us</Link></li>
         </ul>
