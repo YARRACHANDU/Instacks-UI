@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import questions from "../data/questions.json";
+import questions from "../questions/questions.json";
 import { X } from "lucide-react";
 import Link from "next/link";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export default function ProblemsPage() {
   const [filter, setFilter] = useState("all");
@@ -26,6 +28,7 @@ export default function ProblemsPage() {
 
   return (
     <section className="min-h-screen bg-white text-black px-4 md:px-6 pt-8 pb-16">
+    <Navbar/>
       <div className="max-w-7xl mx-auto">
 
         {/* FILTER BUTTONS */}
@@ -60,7 +63,7 @@ export default function ProblemsPage() {
             >
               <div className="rounded-lg overflow-hidden h-36 md:h-40 bg-gray-100">
                 <Image
-                  src={item.image}
+                  src={`/${item.id}.jpg`}
                   alt={item.title}
                   width={400}
                   height={250}
@@ -140,7 +143,7 @@ export default function ProblemsPage() {
             </button>
 
             <Image
-              src={selected.image}
+              src={`/${selected.id}.jpg`}
               alt={selected.title}
               width={500}
               height={250}
@@ -153,13 +156,14 @@ export default function ProblemsPage() {
             <button
               className="w-full bg-black text-white py-3 rounded-lg text-sm font-semibold"
             >
-              <Link href={`/panel`}>
+              <Link href={`/panel/${selected.id}`}>
               Start Solving →
               </Link>
             </button>
           </div>
         </div>
       )}
+      <Footer/>
     </section>
   );
 }
