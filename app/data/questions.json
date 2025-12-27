@@ -11,7 +11,7 @@
     "level": "basic",
     "title": "Styled Button",
     "description": "Create a button with padding, background color, and rounded corners.",
-    "image": "https://source.unsplash.com/1200x500/?button,ui,web,design"
+    "image": "/button.png"
   },
   {
     "id": 3,
