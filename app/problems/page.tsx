@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import questions from "../data/questions.json";
 import { X } from "lucide-react";
+import Link from "next/link";
 
 export default function ProblemsPage() {
   const [filter, setFilter] = useState("all");
@@ -153,7 +154,9 @@ export default function ProblemsPage() {
               className="w-full bg-black hover:bg-gray-900 text-white py-3 rounded-lg font-semibold"
               onClick={() => alert("Open problem editor page")}
             >
+              <Link href={`/panel`}>
               Start Solving →
+              </Link>
             </button>
           </div>
         </div>
