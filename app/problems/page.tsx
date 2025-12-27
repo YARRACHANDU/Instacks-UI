@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import questions from "../data/questions.json";
 import { X } from "lucide-react";
 
@@ -18,21 +18,17 @@ export default function ProblemsPage() {
       : questions.filter((item: any) => item.level === filter);
 
   const totalPages = Math.ceil(filteredQuestions.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
   const currentQuestions = filteredQuestions.slice(
-    startIndex,
-    startIndex + itemsPerPage
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
-  const openModal = (item: any) => setSelected(item);
-  const closeModal = () => setSelected(null);
-
   return (
-    <section className="min-h-screen bg-white text-black px-6 py-20">
+    <section className="min-h-screen bg-white text-black px-4 md:px-6 pt-8 pb-16">
       <div className="max-w-7xl mx-auto">
 
         {/* FILTER BUTTONS */}
-        <div className="flex justify-center gap-3 flex-wrap mb-10">
+        <div className="flex justify-center gap-2 md:gap-4 flex-wrap mb-8 md:mb-10">
           {["all", "basic", "medium", "hard"].map((level) => (
             <button
               key={level}
@@ -40,45 +36,46 @@ export default function ProblemsPage() {
                 setFilter(level);
                 setCurrentPage(1);
               }}
-              className={`px-6 py-2 rounded-full text-sm font-semibold transition-all border
-              ${
-                filter === level
+              className={`px-4 py-2 rounded-full text-xs md:text-sm font-semibold transition-all border
+                ${filter === level
                   ? "bg-black text-white border-black"
                   : "bg-white text-black border-gray-300 hover:bg-black hover:text-white"
-              }`}
+                }`}
             >
               {level.toUpperCase()}
             </button>
           ))}
         </div>
 
-        {/* CARD GRID */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {/* CARDS GRID */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {currentQuestions.map((item: any) => (
             <div
               key={item.id}
-              onClick={() => openModal(item)}
-              className="cursor-pointer rounded-2xl p-4 
-              border border-gray-200 bg-white/30 backdrop-blur-lg
-              hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]
-              hover:-translate-y-1 transition-all"
+              onClick={() => setSelected(item)}
+              className="cursor-pointer rounded-xl p-3 md:p-4 
+              border border-gray-200 bg-white 
+              hover:shadow-lg hover:-translate-y-1 transition-all"
             >
-              <div className="rounded-xl overflow-hidden bg-gray-200 h-40">
+              <div className="rounded-lg overflow-hidden h-36 md:h-40 bg-gray-100">
                 <Image
                   src={item.image}
                   alt={item.title}
-                  width={500}
-                  height={300}
-                  className="object-cover w-full h-full transition-transform hover:scale-110"
+                  width={400}
+                  height={250}
+                  className="object-cover w-full h-full"
                 />
               </div>
 
-              <h3 className="mt-4 text-lg font-bold">{item.title}</h3>
-              <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+              <h3 className="mt-3 md:mt-4 text-base md:text-lg font-bold">
+                {item.title}
+              </h3>
+
+              <p className="text-xs md:text-sm text-gray-600 mt-1 line-clamp-2">
                 {item.description}
               </p>
 
-              <span className={`inline-block mt-3 px-3 py-1 text-xs font-bold rounded-full
+              <span className={`inline-block mt-3 px-3 py-1 text-[10px] md:text-xs font-semibold rounded-full
                 ${
                   item.level === "basic"
                     ? "bg-green-200 text-green-800"
@@ -95,11 +92,11 @@ export default function ProblemsPage() {
 
         {/* PAGINATION */}
         {totalPages > 1 && (
-          <div className="flex justify-center mt-12 gap-3">
+          <div className="flex justify-center mt-10 gap-2 flex-wrap">
             <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50"
+              className="px-3 py-2 border rounded-lg text-xs md:text-sm disabled:opacity-50"
             >
               ← Prev
             </button>
@@ -108,19 +105,21 @@ export default function ProblemsPage() {
               <button
                 key={i}
                 onClick={() => setCurrentPage(i + 1)}
-                className={`px-4 py-2 rounded-lg border font-bold
-                ${currentPage === i + 1 ? "bg-black text-white" : ""}`}
+                className={`px-3 py-2 border rounded-lg text-xs md:text-sm font-semibold
+                  ${
+                    currentPage === i + 1
+                      ? "bg-black text-white"
+                      : "hover:bg-black hover:text-white"
+                  }`}
               >
                 {i + 1}
               </button>
             ))}
 
             <button
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50"
+              className="px-3 py-2 border rounded-lg text-xs md:text-sm disabled:opacity-50"
             >
               Next →
             </button>
@@ -130,28 +129,28 @@ export default function ProblemsPage() {
 
       {/* MODAL */}
       {selected && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-md flex justify-center items-center z-50">
-          <div className="bg-white rounded-2xl p-6 w-[90%] max-w-lg text-black shadow-lg">
-
-            {/* Close Button */}
-            <button onClick={closeModal} className="ml-auto block">
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center px-4 z-50">
+          <div className="bg-white rounded-2xl p-5 md:p-6 w-full max-w-md shadow-xl">
+            <button
+              onClick={() => setSelected(null)}
+              className="ml-auto block text-gray-600 hover:text-black"
+            >
               <X size={26} />
             </button>
 
             <Image
               src={selected.image}
               alt={selected.title}
-              width={600}
-              height={300}
-              className="rounded-xl mb-4"
+              width={500}
+              height={250}
+              className="rounded-lg w-full mb-4"
             />
 
-            <h2 className="text-2xl font-bold mb-2">{selected.title}</h2>
-            <p className="text-gray-700 mb-4">{selected.description}</p>
+            <h2 className="text-xl md:text-2xl font-bold">{selected.title}</h2>
+            <p className="text-gray-700 text-sm md:text-base my-3">{selected.description}</p>
 
             <button
-              className="w-full bg-black hover:bg-gray-900 text-white py-3 rounded-lg font-semibold"
-              onClick={() => alert("Open problem editor page")}
+              className="w-full bg-black text-white py-3 rounded-lg text-sm font-semibold"
             >
               Start Solving →
             </button>
