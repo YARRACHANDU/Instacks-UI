@@ -152,14 +152,15 @@ export default function ProblemsPage() {
 
             <h2 className="text-xl md:text-2xl font-bold">{selected.title}</h2>
             <p className="text-gray-700 text-sm md:text-base my-3">{selected.description}</p>
-
+            <Link href={`/panel/${selected.id}`}>
             <button
               className="w-full bg-black text-white py-3 rounded-lg text-sm font-semibold"
             >
-              <Link href={`/panel/${selected.id}`}>
+             
               Start Solving →
-              </Link>
+             
             </button>
+            </Link>
           </div>
         </div>
       )}
