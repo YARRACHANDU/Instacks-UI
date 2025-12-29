@@ -37,10 +37,9 @@ export default function PanelLayout() {
           viewMode="editor"
           activeFile="index.tsx"
           contents={{ "index.tsx": "// Your code here" }}
-          setContents={() => { }}
+          setContents={() => { } }
           fontSize={14}
-          setFontSize={() => { }}
-        />
+          setFontSize={() => { } } selected={"white"}        />
       </div>
 
       {/* Drag Handle */}
