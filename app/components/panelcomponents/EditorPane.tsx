@@ -10,6 +10,7 @@ interface Props {
   setContents: (v: Record<string, string>) => void;
   fontSize: number;
   setFontSize: (v: number | ((p: number) => number)) => void;
+  selected:'white'|'black'
 }
 
 export default function EditorPane({
@@ -19,6 +20,7 @@ export default function EditorPane({
   setContents,
   fontSize,
   setFontSize,
+  selected
 }: Props) {
   return (
     <div
@@ -62,7 +64,7 @@ export default function EditorPane({
       {/* Monaco Editor */}
       <Editor
         height="100%"
-        theme="vs-dark"
+        theme={`${selected==="white"?"vs-white":"vs-dark"}`}
         language={getLang(activeFile)}
         value={contents[activeFile] || ""}
         onChange={(value) =>

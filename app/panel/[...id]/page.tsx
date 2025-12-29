@@ -137,7 +137,7 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
         <Questions questionId={questionId ?? 0}  selected={selected}/>
       
         <div className="flex-1 flex flex-col overflow-hidden">
-          <Tabs files={files} activeFile={activeFile} setActiveFile={setActiveFile} />
+          <Tabs files={files} activeFile={activeFile} setActiveFile={setActiveFile} selected={selected}/>
 
           <div className="flex flex-1 overflow-hidden">
             <EditorPane
@@ -147,8 +147,9 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
               setContents={setContents}
               fontSize={fontSize}
               setFontSize={setFontSize}
+              selected={selected}
             />
-            <PreviewPane viewMode={viewMode} srcDoc={srcDoc} zoom={zoom} setZoom={setZoom} />
+            <PreviewPane viewMode={viewMode} srcDoc={srcDoc} zoom={zoom} setZoom={setZoom} selected={selected} />
           </div>
           <button
   onClick={() => setShowConsole(prev => !prev)}
