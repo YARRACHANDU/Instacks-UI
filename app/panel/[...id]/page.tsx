@@ -7,9 +7,12 @@ import Tabs from "../../components/panelcomponents/Tabs";
 import EditorPane from "../../components/panelcomponents/EditorPane";
 import PreviewPane from "../../components/panelcomponents/PreviewPane";
 import ConsolePanel from "../../components/panelcomponents/ConsolePanel";
-import Questions from "../../components/panelcomponents/questionpanel"
+import Questions from "../../components/panelcomponents/questionpanel";
 import { useParams } from "next/navigation";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
+
+// ⬇️ ADDED: load Q data
+import questionsData from "../../questions/questions.json";
 
 export const getLang = (f: string) =>
   f.endsWith(".html") ? "html" : f.endsWith(".css") ? "css" : "javascript";
@@ -24,7 +27,7 @@ export default function InstacksEditor() {
   const [questionId, setQuestionId] = useState<number | null>(null);
   const [showConsole, setShowConsole] = useState(false);
   const [selected, setSelected] = useState<"white" | "black">("black");
-  const [editorWidth, setEditorWidth] = useState(50); // percentage
+  const [editorWidth, setEditorWidth] = useState(50); 
   const [isResizing, setIsResizing] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -38,12 +41,10 @@ export default function InstacksEditor() {
     }
   }, [params]);
 
-  // Check if mobile view
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768); // 768px is typical tablet breakpoint
+      setIsMobile(window.innerWidth < 768);
     };
-    
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -61,6 +62,21 @@ export default function InstacksEditor() {
   const [viewMode, setViewMode] = useState<"editor" | "preview">("editor");
   const [zoom, setZoom] = useState(100);
   const [fontSize, setFontSize] = useState(14);
+
+  // ⬇️ ADDED: Load HTML/CSS/JS for that question ID
+  useEffect(() => {
+    if (!questionId) return;
+    const question = questionsData.find(q => q.id === questionId);
+    if (!question?.code) return;
+
+    setContents({
+      "index.html": question.code.html || "<!-- Write HTML here -->",
+      "style.css": question.code.css || "/* Write CSS here */",
+      "script.js": question.code.js || "// Write JS here"
+    });
+
+    console.log("Loaded code for question:", questionId);
+  }, [questionId]);
 
   const addFile = () => {
     const fileName = prompt("Enter file name");
@@ -82,23 +98,16 @@ export default function InstacksEditor() {
     const css = Object.entries(contents).filter(([k]) => k.endsWith(".css")).map(([, v]) => v).join("\n");
     const js = Object.entries(contents).filter(([k]) => k.endsWith(".js")).map(([, v]) => v).join("\n");
 
-    setSrcDoc(`<!DOCTYPE html>
-<html>
-<head><style>${css}</style></head>
-<body>
-${html}
+    setSrcDoc(`<!DOCTYPE html><html><head><style>${css}</style></head><body>${html}
 <script>
 (function(){
 const send=(t,a)=>parent.postMessage({source:"iframe-console",type:t,message:a.join(" ")},"*");
 ["log","warn","error"].forEach(k=>{
- const o=console[k];
- console[k]=(...a)=>{send(k,a);o(...a);}
-});
+ const o=console[k];console[k]=(...a)=>{send(k,a);o(...a);} });
 window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
 })();
 </script>
-<script>${js}</script>
-</body></html>`);
+<script>${js}</script></body></html>`);
   };
 
   useEffect(() => {
@@ -118,29 +127,22 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
   }, []);
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (isMobile) return; // Disable resizing on mobile
+    if (isMobile) return;
     e.preventDefault();
     setIsResizing(true);
   };
 
   useEffect(() => {
-    if (isMobile) return; // Don't set up resize listeners on mobile
-
+    if (isMobile) return;
     const handleMouseMove = (e: MouseEvent) => {
       if (!isResizing) return;
-      e.preventDefault();
       const container = document.getElementById('editor-preview-container');
       if (!container) return;
-      const containerRect = container.getBoundingClientRect();
-      const newWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100;
-      if (newWidth > 20 && newWidth < 80) {
-        setEditorWidth(newWidth);
-      }
+      const rect = container.getBoundingClientRect();
+      const newWidth = ((e.clientX - rect.left) / rect.width) * 100;
+      if (newWidth > 20 && newWidth < 80) setEditorWidth(newWidth);
     };
-
-    const handleMouseUp = () => {
-      setIsResizing(false);
-    };
+    const handleMouseUp = () => setIsResizing(false);
 
     if (isResizing) {
       document.addEventListener('mousemove', handleMouseMove);
@@ -164,7 +166,6 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
     <div className="h-screen flex flex-col bg-slate-900 text-white overflow-hidden">
       <TopBar autoRun={autoRun} setAutoRun={setAutoRun} build={build} selected={selected} />
       
-      {/* Mobile View Toggle - Only visible on mobile */}
       {isMobile && (
         <MobileViewToggle viewMode={viewMode} setViewMode={setViewMode} selected={selected} />
       )}
@@ -241,7 +242,6 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
 </button>
 
 
-
       <div className="flex flex-1 overflow-hidden">
         <Questions questionId={questionId ?? 0} selected={selected} />
 
@@ -249,45 +249,27 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
           <Tabs files={files} activeFile={activeFile} setActiveFile={setActiveFile} selected={selected} />
 
           <div id="editor-preview-container" className="flex flex-1 overflow-hidden relative">
-            {/* Mobile View - Toggle between editor and preview */}
+            
             {isMobile ? (
               <>
                 {viewMode === "editor" && (
-                  <div className="flex flex-col w-full h-full">
-                    <EditorPane
-                      viewMode={viewMode}
-                      activeFile={activeFile}
-                      contents={contents}
-                      setContents={setContents}
-                      fontSize={fontSize}
-                      setFontSize={setFontSize}
-                      selected={selected}
-                    />
-                  </div>
+                  <EditorPane
+                    viewMode={viewMode}
+                    activeFile={activeFile}
+                    contents={contents}
+                    setContents={setContents}
+                    fontSize={fontSize}
+                    setFontSize={setFontSize}
+                    selected={selected}
+                  />
                 )}
                 {viewMode === "preview" && (
-                  <div className="flex flex-col w-full h-full">
-                    <PreviewPane 
-                      viewMode={viewMode} 
-                      srcDoc={srcDoc} 
-                      zoom={zoom} 
-                      setZoom={setZoom} 
-                      selected={selected} 
-                    />
-                  </div>
+                  <PreviewPane viewMode={viewMode} srcDoc={srcDoc} zoom={zoom} setZoom={setZoom} selected={selected} />
                 )}
               </>
             ) : (
-              /* Desktop/Tablet View - Split view with resizer */
               <>
-                {/* Editor Panel */}
-                <div 
-                  className="flex flex-col"
-                  style={{ 
-                    width: `${editorWidth}%`, 
-                    height: '100%'
-                  }}
-                >
+                <div className="flex flex-col" style={{ width: `${editorWidth}%` }}>
                   <EditorPane
                     viewMode={viewMode}
                     activeFile={activeFile}
@@ -298,43 +280,21 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
                     selected={selected}
                   />
                 </div>
-                
-                {/* Resizer - Only visible on desktop/tablet */}
+
                 {!isMobile && (
                   <div
                     onMouseDown={handleMouseDown}
                     className={`w-1 bg-gray-700 hover:bg-blue-500 cursor-col-resize transition-colors ${isResizing ? 'bg-blue-500' : ''}`}
-                    style={{ 
-                      flexShrink: 0, 
-                      height: '100%', 
-                      zIndex: 10 
-                    }}
+                    style={{ height: '100%', zIndex: 10 }}
                   />
                 )}
-                
-                {/* Preview Panel */}
-                <div 
-                  className="flex flex-col"
-                  style={{ 
-                    width: `${100 - editorWidth}%`, 
-                    height: '100%'
-                  }}
-                >
-                  <PreviewPane 
-                    viewMode={viewMode} 
-                    srcDoc={srcDoc} 
-                    zoom={zoom} 
-                    setZoom={setZoom} 
-                    selected={selected} 
-                  />
+
+                <div className="flex flex-col" style={{ width: `${100 - editorWidth}%` }}>
+                  <PreviewPane viewMode={viewMode} srcDoc={srcDoc} zoom={zoom} setZoom={setZoom} selected={selected} />
                 </div>
 
-                {/* Overlay to prevent interaction during resize */}
                 {isResizing && (
-                  <div 
-                    className="absolute inset-0 z-20" 
-                    style={{ cursor: 'col-resize' }}
-                  />
+                  <div className="absolute inset-0 z-20" style={{ cursor: 'col-resize' }} />
                 )}
               </>
             )}
@@ -348,13 +308,10 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
           </button>
 
           {showConsole && (
-            <ConsolePanel
-              logs={logs}
-              clearLogs={() => setLogs([])} selected={"white"}            />
+            <ConsolePanel logs={logs} clearLogs={() => setLogs([])} selected={"white"} />
           )}
         </div>
       </div>
     </div>
   );
 }
-
