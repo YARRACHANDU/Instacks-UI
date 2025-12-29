@@ -16,13 +16,8 @@
     "lucide-react": "^0.562.0",
     "next": "^16.0.7",
     "next-themes": "^0.4.6",
-<<<<<<< HEAD
     "react": "19.2.3",
     "react-dom": "19.2.3",
-=======
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
->>>>>>> afdb679a031e36b2ad41c1fda2f60785a37770f2
     "react-resizable": "^3.0.5",
     "react-resizable-panels": "^4.0.15",
     "react-split": "^2.0.14",
