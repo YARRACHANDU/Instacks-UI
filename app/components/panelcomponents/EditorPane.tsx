@@ -10,6 +10,7 @@ interface Props {
   setContents: (v: Record<string, string>) => void;
   fontSize: number;
   setFontSize: (v: number | ((p: number) => number)) => void;
+  selected: "white" | "black";
 }
 
 export default function EditorPane({
@@ -19,6 +20,7 @@ export default function EditorPane({
   setContents,
   fontSize,
   setFontSize,
+  selected
 }: Props) {
   return (
     <div
@@ -26,17 +28,17 @@ export default function EditorPane({
         } flex-1 flex-col bg-white border-r border-slate-700`}
     >
       {/* Header */}
-      <div className="flex items-center justify-between bg-white border-b border-slate-700 px-3 py-2">
+      <div className={`flex items-center justify-between ${selected==="white"?"bg-white text-black":"bg-black text-white"} border-b border-slate-700 px-3 py-2`}>
         <div className="flex items-center gap-2">
           <span className="text-lg">{getIcon(activeFile)}</span>
-          <span className="text-sm font-mono text-black truncate">
+          <span className="text-sm font-mono  truncate">
             {activeFile}
           </span>
         </div>
 
         <div className="flex items-center gap-3">
           {/* Font size controls (ADDED) */}
-          <div className="flex items-center gap-1 bg-slate-700 rounded px-1 py-0.5 text-xs">
+          <div className={`flex items-center gap-1 ${selected==="white"?"bg-black text-white":"bg-white text-black"} rounded px-1 py-0.5 text-xs`}>
             <button
               onClick={() => setFontSize((p) => Math.max(10, p - 2))}
               className="px-1 hover:text-white"
@@ -52,7 +54,7 @@ export default function EditorPane({
             </button>
           </div>
 
-          <span className="px-2 py-1 bg-slate-700 rounded text-xs uppercase font-semibold">
+          <span className={`px-2 py-1 ${selected==="white"?"bg-black text-white":"bg-white text-black"}  rounded text-xs uppercase font-semibold`}>
             {getLang(activeFile)}
           </span>
         </div>

@@ -8,7 +8,7 @@ export default function MobileViewToggle({ viewMode, setViewMode ,selected}: Pro
   return (
     <div
   className={`md:hidden flex border-b border-slate-700 ${
-    selected === "black" ? "bg-slate-800" : "bg-white"
+    selected === "black" ? "bg-black" : "bg-white"
   }`}
 >
 
@@ -16,7 +16,7 @@ export default function MobileViewToggle({ viewMode, setViewMode ,selected}: Pro
         onClick={() => setViewMode("editor")}
         className={`flex-1 py-2 ${
           viewMode === "editor" ? "text-emerald-400 border-b-2 border-emerald-400" : "text-slate-400"
-        }`}
+        } `}
       >
         📝 Editor
       </button>

@@ -94,7 +94,7 @@ function QuestionContent({
     <div className="space-y-5 p-4">
 
       <h2 className={`text-lg font-semibold ${selected=="black"?"text-white":"text-black"}`}>
-        Question {index + 1} / {total}
+        {question.title}
       </h2>
 
       <div className="rounded-lg overflow-hidden bg-gray-100 h-36 lg:h-40">

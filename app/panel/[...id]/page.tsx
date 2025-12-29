@@ -105,7 +105,7 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
     if (!autoRun) return;
     const t = setTimeout(build, 300);
     return () => clearTimeout(t);
-  }, [contents, autoRun, build]);
+  }, [contents, autoRun]);
 
   useEffect(() => {
     const handler = (e: MessageEvent) => {
@@ -298,11 +298,11 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
           {showConsole && (
             <ConsolePanel
               logs={logs}
-              clearLogs={() => setLogs([])}
-            />
+              clearLogs={() => setLogs([])} selected={"white"}            />
           )}
         </div>
       </div>
     </div>
   );
 }
+
