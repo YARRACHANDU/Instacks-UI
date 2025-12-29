@@ -65,7 +65,7 @@ export default function EditorPane({
       {/* Monaco Editor */}
       <Editor
         height="100%"
-        theme="vs-dark"
+        theme={`${selected==="black"?"vs-dark":"vs-white"}`}
         language={getLang(activeFile)}
         value={contents[activeFile] || ""}
         onChange={(value) =>
