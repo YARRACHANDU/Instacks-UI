@@ -23,12 +23,11 @@ export default function InstacksEditor() {
   const [isFileExplorerOpen, setIsFileExplorerOpen] = useState(false);
   const [questionId, setQuestionId] = useState<number | null>(null);
   const [showConsole, setShowConsole] = useState(false);
-  {/* props ki related state*/}
   const [selected, setSelected] = useState<"white" | "black">("black");
-  
+  const [editorWidth, setEditorWidth] = useState(50); // percentage
+  const [isResizing, setIsResizing] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-
-  
   const params = useParams();
 
   useEffect(() => {
@@ -38,6 +37,17 @@ export default function InstacksEditor() {
       console.log("Question ID:", id);
     }
   }, [params]);
+
+  // Check if mobile view
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // 768px is typical tablet breakpoint
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const [contents, setContents] = useState<Record<string, string>>({
     "index.html": "<h1>Hello Online Editor 🚀</h1>",
@@ -95,7 +105,7 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
     if (!autoRun) return;
     const t = setTimeout(build, 300);
     return () => clearTimeout(t);
-  }, [contents, autoRun]);
+  }, [contents, autoRun, build]);
 
   useEffect(() => {
     const handler = (e: MessageEvent) => {
@@ -107,65 +117,190 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
     return () => window.removeEventListener("message", handler);
   }, []);
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (isMobile) return; // Disable resizing on mobile
+    e.preventDefault();
+    setIsResizing(true);
+  };
+
+  useEffect(() => {
+    if (isMobile) return; // Don't set up resize listeners on mobile
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing) return;
+      e.preventDefault();
+      const container = document.getElementById('editor-preview-container');
+      if (!container) return;
+      const containerRect = container.getBoundingClientRect();
+      const newWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+      if (newWidth > 20 && newWidth < 80) {
+        setEditorWidth(newWidth);
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+    };
+
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    } else {
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+  }, [isResizing, isMobile]);
+
   return (
     <div className="h-screen flex flex-col bg-slate-900 text-white overflow-hidden">
       <TopBar autoRun={autoRun} setAutoRun={setAutoRun} build={build} selected={selected} />
-      <MobileViewToggle viewMode={viewMode} setViewMode={setViewMode} selected={selected} />
- <button
-  onClick={() =>
-    setSelected((s) => (s === "black" ? "white" : "black"))
-  }
-  className={`
+      
+      {/* Mobile View Toggle - Only visible on mobile */}
+      {isMobile && (
+        <MobileViewToggle viewMode={viewMode} setViewMode={setViewMode} selected={selected} />
+      )}
+      
+      <button
+        onClick={() =>
+          setSelected((s) => (s === "black" ? "white" : "black"))
+        }
+        className={`
     fixed bottom-162 right-6 z-50
     w-17 h-7 rounded-full
     transition-colors duration-300
     ${selected === "black" ? "bg-black" : "bg-gray-300"}
   `}
->
-  <span
-    className={`
+      >
+        <span
+          className={`
       absolute top-1 left-1
       w-5 h-5 rounded-full bg-white
       transition-transform duration-300
       ${selected === "black" ? "translate-x-10" : "translate-x-0"}
     `}
-  />
-</button>
-
+        />
+      </button>
 
       <div className="flex flex-1 overflow-hidden">
-        <Questions questionId={questionId ?? 0}  selected={selected}/>
-      
+        <Questions questionId={questionId ?? 0} selected={selected} />
+
         <div className="flex-1 flex flex-col overflow-hidden">
-          <Tabs files={files} activeFile={activeFile} setActiveFile={setActiveFile} selected={selected}/>
+          <Tabs files={files} activeFile={activeFile} setActiveFile={setActiveFile} selected={selected} />
 
-          <div className="flex flex-1 overflow-hidden">
-            <EditorPane
-              viewMode={viewMode}
-              activeFile={activeFile}
-              contents={contents}
-              setContents={setContents}
-              fontSize={fontSize}
-              setFontSize={setFontSize}
-              selected={selected}
-            />
-            <PreviewPane viewMode={viewMode} srcDoc={srcDoc} zoom={zoom} setZoom={setZoom} selected={selected} />
+          <div id="editor-preview-container" className="flex flex-1 overflow-hidden relative">
+            {/* Mobile View - Toggle between editor and preview */}
+            {isMobile ? (
+              <>
+                {viewMode === "editor" && (
+                  <div className="flex flex-col w-full h-full">
+                    <EditorPane
+                      viewMode={viewMode}
+                      activeFile={activeFile}
+                      contents={contents}
+                      setContents={setContents}
+                      fontSize={fontSize}
+                      setFontSize={setFontSize}
+                      selected={selected}
+                    />
+                  </div>
+                )}
+                {viewMode === "preview" && (
+                  <div className="flex flex-col w-full h-full">
+                    <PreviewPane 
+                      viewMode={viewMode} 
+                      srcDoc={srcDoc} 
+                      zoom={zoom} 
+                      setZoom={setZoom} 
+                      selected={selected} 
+                    />
+                  </div>
+                )}
+              </>
+            ) : (
+              /* Desktop/Tablet View - Split view with resizer */
+              <>
+                {/* Editor Panel */}
+                <div 
+                  className="flex flex-col"
+                  style={{ 
+                    width: `${editorWidth}%`, 
+                    height: '100%'
+                  }}
+                >
+                  <EditorPane
+                    viewMode={viewMode}
+                    activeFile={activeFile}
+                    contents={contents}
+                    setContents={setContents}
+                    fontSize={fontSize}
+                    setFontSize={setFontSize}
+                    selected={selected}
+                  />
+                </div>
+                
+                {/* Resizer - Only visible on desktop/tablet */}
+                {!isMobile && (
+                  <div
+                    onMouseDown={handleMouseDown}
+                    className={`w-1 bg-gray-700 hover:bg-blue-500 cursor-col-resize transition-colors ${isResizing ? 'bg-blue-500' : ''}`}
+                    style={{ 
+                      flexShrink: 0, 
+                      height: '100%', 
+                      zIndex: 10 
+                    }}
+                  />
+                )}
+                
+                {/* Preview Panel */}
+                <div 
+                  className="flex flex-col"
+                  style={{ 
+                    width: `${100 - editorWidth}%`, 
+                    height: '100%'
+                  }}
+                >
+                  <PreviewPane 
+                    viewMode={viewMode} 
+                    srcDoc={srcDoc} 
+                    zoom={zoom} 
+                    setZoom={setZoom} 
+                    selected={selected} 
+                  />
+                </div>
+
+                {/* Overlay to prevent interaction during resize */}
+                {isResizing && (
+                  <div 
+                    className="absolute inset-0 z-20" 
+                    style={{ cursor: 'col-resize' }}
+                  />
+                )}
+              </>
+            )}
           </div>
+
           <button
-  onClick={() => setShowConsole(prev => !prev)}
-  className="px-3 py-1 bg-gray-800 text-white rounded text-sm hover:bg-gray-700 transition"
->
-  {showConsole ? "Hide Console" : "Show Console"}
-</button>
+            onClick={() => setShowConsole(prev => !prev)}
+            className="px-3 py-1 bg-gray-800 text-white rounded text-sm hover:bg-gray-700 transition"
+          >
+            {showConsole ? "Hide Console" : "Show Console"}
+          </button>
 
-
-         {showConsole && (
-  <ConsolePanel
-    logs={logs}
-    clearLogs={() => setLogs([])}
-  />
-)}
-
+          {showConsole && (
+            <ConsolePanel
+              logs={logs}
+              clearLogs={() => setLogs([])}
+            />
+          )}
         </div>
       </div>
     </div>
