@@ -116,18 +116,18 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
     setSelected((s) => (s === "black" ? "white" : "black"))
   }
   className={`
-    fixed bottom-162 right-6 z-50
+    fixed bottom-162.5 right-6 z-50
     w-17 h-7 rounded-full
     transition-colors duration-300
-    ${selected === "black" ? "bg-black" : "bg-gray-300"}
+    ${selected === "black" ? "bg-white" : "bg-black"}
   `}
 >
   <span
     className={`
       absolute top-1 left-1
-      w-5 h-5 rounded-full bg-white
+      w-5 h-5 rounded-full
       transition-transform duration-300
-      ${selected === "black" ? "translate-x-10" : "translate-x-0"}
+      ${selected === "black" ? "translate-x-10 bg-black" : "translate-x-0 bg-white"}
     `}
   />
 </button>
@@ -163,6 +163,7 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
   <ConsolePanel
     logs={logs}
     clearLogs={() => setLogs([])}
+    selected={selected}
   />
 )}
 

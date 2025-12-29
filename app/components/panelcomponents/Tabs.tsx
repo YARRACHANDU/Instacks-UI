@@ -4,32 +4,46 @@ interface Props {
   files: { name: string }[];
   activeFile: string;
   setActiveFile: (f: string) => void;
-  selected:"white" |"black";
+  selected: "white" | "black";
 }
 
-export default function Tabs({ files, activeFile, setActiveFile,selected }: Props) {
+export default function Tabs({
+  files,
+  activeFile,
+  setActiveFile,
+  selected,
+}: Props) {
   return (
-    <div className={`flex  ${selected==="white"?"bg-white":"bg-black"} border-b border-slate-700 overflow-x-auto`}>
-      {files.map((f) => (
-       <button
-  key={f.name}
-  onClick={() => setActiveFile(f.name)}
-  className={`px-4 py-2 text-sm font-mono border-r border-slate-700 transition-colors
-    ${
-      activeFile === f.name
-        ? `${
-            selected === "white"
-              ? "bg-black text-white"
-              : "bg-white text-black"
-          } border-b-2 border-emerald-400`
-        : " text-white"
-    }
-  `}
->
-  {getIcon(f.name)} {f.name}
-</button>
+    <div
+      className={`flex border-b border-slate-700 overflow-x-auto ${
+        selected === "white" ? "bg-white" : "bg-black"
+      }`}
+    >
+      {files.map((f) => {
+        const isActive = activeFile === f.name;
 
-      ))}
+        return (
+          <button
+            key={f.name}
+            onClick={() => setActiveFile(f.name)}
+            className={`
+              px-4 py-2 text-sm font-mono border-r border-slate-700
+              transition-all duration-200
+              ${
+                isActive
+                  ? selected === "white"
+                    ? "bg-slate-200 text-black border-b-2 border-emerald-500"
+                    : "bg-slate-800 text-white border-b-2 border-emerald-400"
+                  : selected === "white"
+                  ? "bg-white text-slate-600 hover:bg-slate-100"
+                  : "bg-black text-slate-400 hover:bg-slate-900"
+              }
+            `}
+          >
+            {getIcon(f.name)} {f.name}
+          </button>
+        );
+      })}
     </div>
   );
 }
