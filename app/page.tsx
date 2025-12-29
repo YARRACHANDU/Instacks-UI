@@ -46,10 +46,10 @@ export default function Home() {
             {/* Buttons */}
             <div className="flex items-center gap-4 mt-8">
               <button className="bg-black hover:bg-black text-white font-medium px-5 py-2.5 rounded-lg transition">
-                Explore →
+               <a href="/problems"> Explore →</a>
               </button>
               <button className="border border-zinc-500 dark:border-zinc-400 hover:border-rose-500 px-5 py-2.5 rounded-lg transition">
-                See all problems →
+                <a href="/problems">See all problems →</a>
               </button>
             </div>
           </div>
@@ -90,7 +90,7 @@ export default function Home() {
     {/* Button */}
     <div className="mt-10">
       <button className="px-8 py-3 rounded-xl font-medium text-black bg-gradient-to-r from-orange-400 to-yellow-500 hover:brightness-110 shadow-lg transition-all flex items-center gap-2 mx-auto">
-        Explore UI Problems →
+        <a href="/problems">Explore UI Problems →</a>
       </button>
     </div>
 
@@ -232,7 +232,7 @@ export default function Home() {
     </p>
 
     <button className="bg-rose-500 hover:bg-rose-600 px-8 py-3 text-lg font-semibold rounded-xl shadow-md transition">
-      Start Learning Now →
+      <a href="/problems">Start Learning Now →</a>
     </button>
 
   </div>
