@@ -14,10 +14,12 @@ interface Props {
   setAutoRun: (v: boolean) => void;
   build: () => void;
  selected: "white" | "black";
+ question:any
 }
 
-export default function TopBar({ autoRun, setAutoRun, build ,selected}: Props) {
+export default function TopBar({ autoRun, setAutoRun, build ,selected ,question}: Props) {
   const [isFullscreen, setIsFullscreen] = useState(false);
+  console.log(question)
 
 
   const toggleFullscreen = () => {
@@ -61,6 +63,14 @@ export default function TopBar({ autoRun, setAutoRun, build ,selected}: Props) {
 </Link>
 
 </div>
+{question && (
+  <div className="hidden md:flex justify-center">
+    <h1 className="text-sm font-semibold text-center">
+      {question.title}
+    </h1>
+  </div>
+)}
+
 
         
 

@@ -55,10 +55,12 @@ export default function PreviewPane({
         }}
       >
         <iframe
-  sandbox="allow-scripts allow-modals"
+  id="preview-iframe"
   srcDoc={srcDoc}
-  className="w-full h-full border-0"
+  className="w-full h-full"
+  sandbox="allow-scripts allow-same-origin"
 />
+
       </div>
     </div>
   );
