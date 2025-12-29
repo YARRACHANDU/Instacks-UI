@@ -189,14 +189,9 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
 
   return (
     <div className="h-screen flex flex-col bg-slate-900 text-white overflow-hidden">
-<<<<<<< HEAD
       <TopBar autoRun={autoRun} setAutoRun={setAutoRun} build={build} selected={selected} question={question} />
       
-      {/* Mobile View Toggle - Only visible on mobile */}
-=======
-      <TopBar autoRun={autoRun} setAutoRun={setAutoRun} build={build} selected={selected} />
 
->>>>>>> afdb679a031e36b2ad41c1fda2f60785a37770f2
       {isMobile && (
         <MobileViewToggle viewMode={viewMode} setViewMode={setViewMode} selected={selected} />
       )}
