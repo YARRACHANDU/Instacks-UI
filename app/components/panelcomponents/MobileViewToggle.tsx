@@ -18,7 +18,7 @@ export default function MobileViewToggle({ viewMode, setViewMode ,selected}: Pro
           viewMode === "editor" ? "text-emerald-400 border-b-2 border-emerald-400" : "text-slate-400"
         } `}
       >
-        📝 Editor
+        Editor
       </button>
       <button
         onClick={() => setViewMode("preview")}
@@ -26,7 +26,7 @@ export default function MobileViewToggle({ viewMode, setViewMode ,selected}: Pro
           viewMode === "preview" ? "text-emerald-400 border-b-2 border-emerald-400" : "text-slate-400"
         }`}
       >
-        👁 Preview
+        Preview
       </button>
     </div>
   );
