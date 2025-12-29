@@ -10,6 +10,7 @@ interface Props {
   setContents: (v: Record<string, string>) => void;
   fontSize: number;
   setFontSize: (v: number | ((p: number) => number)) => void;
+  selected:'white'|'black'
 }
 
 export default function EditorPane({
@@ -19,18 +20,19 @@ export default function EditorPane({
   setContents,
   fontSize,
   setFontSize,
+  selected
 }: Props) {
   return (
     <div
       className={`${
         viewMode === "editor" ? "flex" : "hidden md:flex"
-      } flex-1 flex-col bg-slate-900 border-r border-slate-700`}
+      } flex-1 flex-col bg-white border-r border-slate-700`}
     >
       {/* Header */}
-      <div className="flex items-center justify-between bg-slate-800 border-b border-slate-700 px-3 py-2">
+      <div className="flex items-center justify-between bg-white border-b border-slate-700 px-3 py-2">
         <div className="flex items-center gap-2">
           <span className="text-lg">{getIcon(activeFile)}</span>
-          <span className="text-sm font-mono text-slate-300 truncate">
+          <span className="text-sm font-mono text-black truncate">
             {activeFile}
           </span>
         </div>
@@ -62,7 +64,7 @@ export default function EditorPane({
       {/* Monaco Editor */}
       <Editor
         height="100%"
-        theme="vs-dark"
+        theme={`${selected==="white"?"vs-white":"vs-dark"}`}
         language={getLang(activeFile)}
         value={contents[activeFile] || ""}
         onChange={(value) =>

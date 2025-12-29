@@ -7,9 +7,10 @@ import questions from "../../questions/questions.json";
 
 type Props = {
   questionId: number;
+  selected:'white'|'black';
 };
 
-export default function QuestionPanel({ questionId }: Props) {
+export default function QuestionPanel({ questionId,selected }: Props) {
   const [open, setOpen] = useState(false);
 
   const questionIndex = questions.findIndex(q => q.id === questionId);
@@ -22,7 +23,7 @@ export default function QuestionPanel({ questionId }: Props) {
   return (
     <>
       {/* 🔹 MOBILE ICON (OPEN) */}
-      <div className="md:hidden p-2 bg-slate-800 border-b border-slate-700">
+      <div className={`md:hidden p-2 ${selected==="black"?"bg-white":"bg-black"} border-b border-slate-700`}>
         <button
           onClick={() => setOpen(true)}
           title="Show Question"
@@ -34,19 +35,17 @@ export default function QuestionPanel({ questionId }: Props) {
 
       {/* 🔹 DESKTOP PANEL (ALWAYS VISIBLE) */}
       <div
-        className="
-          hidden md:block
-          h-full bg-white overflow-y-auto
-          w-72 lg:w-80
-          p-4 md:p-6
-        "
-      >
-        <QuestionContent
-          question={question}
-          index={questionIndex}
-          total={questions.length}
-        />
-      </div>
+  className={`hidden md:block h-full ${
+    selected === "black" ? "bg-black" : "bg-white"
+  } overflow-y-auto w-72 lg:w-80 p-4 md:p-6`}
+>
+  <QuestionContent
+    question={question}
+    index={questionIndex}
+    total={questions.length}
+    selected={selected}
+  />
+</div>
 
       {/* 🔹 MOBILE OVERLAY PANEL */}
       {open && (
@@ -69,6 +68,7 @@ export default function QuestionPanel({ questionId }: Props) {
               question={question}
               index={questionIndex}
               total={questions.length}
+              selected={selected}
             />
           </div>
         </div>
@@ -83,15 +83,17 @@ function QuestionContent({
   question,
   index,
   total,
+  selected
 }: {
   question: any;
   index: number;
   total: number;
+  selected:"white"| "black"
 }) {
   return (
     <div className="space-y-5 p-4">
 
-      <h2 className="text-lg font-semibold text-black">
+      <h2 className={`text-lg font-semibold ${selected=="black"?"text-white":"text-black"}`}>
         Question {index + 1} / {total}
       </h2>
 
@@ -105,24 +107,24 @@ function QuestionContent({
         />
       </div>
 
-      <p className="text-sm md:text-base text-gray-800 leading-relaxed">
+      <p className={`text-sm md:text-base ${selected=="black"?"text-white":"text-black"}  leading-relaxed`}>
         {question.problemOverview}
       </p>
 
       <hr />
 
-      <Section title="Requirements" items={question.requirements} />
+      <Section title="Requirements" items={question.requirements} selected={selected}/>
       <hr />
-      <Section title="Objectives" items={question.objectives} />
+      <Section title="Objectives" items={question.objectives} selected={selected}/>
       <hr />
-      <Section title="Attributes" items={question.attributes} />
+      <Section title="Attributes" items={question.attributes} selected={selected}/>
       <hr />
 
       <div>
-        <h3 className="font-semibold mb-1 text-black">
+        <h3 className={`font-semibold mb-1 ${selected=="black"?"text-white":"text-black"}`}>
           Expected Output:
         </h3>
-        <p className="text-sm md:text-base text-gray-800">
+        <p className={`text-sm md:text-base ${selected=="black"?"text-white":"text-black"}`}>
           {question.expectedOutcome}
         </p>
       </div>
@@ -131,11 +133,11 @@ function QuestionContent({
   );
 }
 
-function Section({ title, items }: { title: string; items: string[] }) {
+function Section({ title, items,selected }: { title: string; items: string[] ,selected:"white"|"black"}) {
   return (
     <div>
-      <h3 className="font-semibold mb-1 text-black">{title}:</h3>
-      <ul className="list-disc pl-5 text-sm space-y-1 text-gray-800">
+      <h3 className={`font-semibold mb-1 ${selected=="black"?"text-white":"text-black"}`}>{title}:</h3>
+      <ul className={`list-disc pl-5 text-sm space-y-1 ${selected=="black"?"text-white":"text-black"}`}>
         {items.map((item, i) => (
           <li key={i}>{item}</li>
         ))}

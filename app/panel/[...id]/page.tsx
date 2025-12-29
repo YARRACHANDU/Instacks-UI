@@ -9,7 +9,7 @@ import PreviewPane from "../../components/panelcomponents/PreviewPane";
 import ConsolePanel from "../../components/panelcomponents/ConsolePanel";
 import Questions from "../../components/panelcomponents/questionpanel"
 import { useParams } from "next/navigation";
-
+import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
 
 export const getLang = (f: string) =>
   f.endsWith(".html") ? "html" : f.endsWith(".css") ? "css" : "javascript";
@@ -22,6 +22,12 @@ export default function InstacksEditor() {
   const [activeFile, setActiveFile] = useState("index.html");
   const [isFileExplorerOpen, setIsFileExplorerOpen] = useState(false);
   const [questionId, setQuestionId] = useState<number | null>(null);
+  const [showConsole, setShowConsole] = useState(false);
+  {/* props ki related state*/}
+  const [selected, setSelected] = useState<"white" | "black">("black");
+  
+
+
   
   const params = useParams();
 
@@ -103,14 +109,35 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
 
   return (
     <div className="h-screen flex flex-col bg-slate-900 text-white overflow-hidden">
-      <TopBar autoRun={autoRun} setAutoRun={setAutoRun} build={build} />
-      <MobileViewToggle viewMode={viewMode} setViewMode={setViewMode} />
+      <TopBar autoRun={autoRun} setAutoRun={setAutoRun} build={build} selected={selected} />
+      <MobileViewToggle viewMode={viewMode} setViewMode={setViewMode} selected={selected} />
+ <button
+  onClick={() =>
+    setSelected((s) => (s === "black" ? "white" : "black"))
+  }
+  className={`
+    fixed bottom-162 right-6 z-50
+    w-17 h-7 rounded-full
+    transition-colors duration-300
+    ${selected === "black" ? "bg-black" : "bg-gray-300"}
+  `}
+>
+  <span
+    className={`
+      absolute top-1 left-1
+      w-5 h-5 rounded-full bg-white
+      transition-transform duration-300
+      ${selected === "black" ? "translate-x-10" : "translate-x-0"}
+    `}
+  />
+</button>
+
 
       <div className="flex flex-1 overflow-hidden">
-        <Questions questionId={questionId ?? 0}/>
+        <Questions questionId={questionId ?? 0}  selected={selected}/>
       
         <div className="flex-1 flex flex-col overflow-hidden">
-          <Tabs files={files} activeFile={activeFile} setActiveFile={setActiveFile} />
+          <Tabs files={files} activeFile={activeFile} setActiveFile={setActiveFile} selected={selected}/>
 
           <div className="flex flex-1 overflow-hidden">
             <EditorPane
@@ -120,11 +147,25 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
               setContents={setContents}
               fontSize={fontSize}
               setFontSize={setFontSize}
+              selected={selected}
             />
-            <PreviewPane viewMode={viewMode} srcDoc={srcDoc} zoom={zoom} setZoom={setZoom} />
+            <PreviewPane viewMode={viewMode} srcDoc={srcDoc} zoom={zoom} setZoom={setZoom} selected={selected} />
           </div>
+          <button
+  onClick={() => setShowConsole(prev => !prev)}
+  className="px-3 py-1 bg-gray-800 text-white rounded text-sm hover:bg-gray-700 transition"
+>
+  {showConsole ? "Hide Console" : "Show Console"}
+</button>
 
-          <ConsolePanel logs={logs} clearLogs={() => setLogs([])} />
+
+         {showConsole && (
+  <ConsolePanel
+    logs={logs}
+    clearLogs={() => setLogs([])}
+  />
+)}
+
         </div>
       </div>
     </div>

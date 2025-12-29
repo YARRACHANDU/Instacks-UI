@@ -1,11 +1,17 @@
 interface Props {
   viewMode: "editor" | "preview";
   setViewMode: (v: "editor" | "preview") => void;
+  selected:"white"|"black";
 }
 
-export default function MobileViewToggle({ viewMode, setViewMode }: Props) {
+export default function MobileViewToggle({ viewMode, setViewMode ,selected}: Props) {
   return (
-    <div className="md:hidden flex bg-slate-800 border-b border-slate-700">
+    <div
+  className={`md:hidden flex border-b border-slate-700 ${
+    selected === "black" ? "bg-slate-800" : "bg-white"
+  }`}
+>
+
       <button
         onClick={() => setViewMode("editor")}
         className={`flex-1 py-2 ${

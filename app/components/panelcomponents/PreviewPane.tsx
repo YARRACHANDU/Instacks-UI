@@ -3,6 +3,7 @@ interface Props {
   srcDoc: string;
   zoom: number;
   setZoom: (v: number | ((p: number) => number)) => void;
+  selected:"white"|"black"
 }
 
 export default function PreviewPane({
@@ -10,6 +11,7 @@ export default function PreviewPane({
   srcDoc,
   zoom,
   setZoom,
+  selected
 }: Props) {
   const scale = zoom / 100;
 
@@ -20,7 +22,7 @@ export default function PreviewPane({
       } flex-1 relative bg-white overflow-hidden`}
     >
       {/* Zoom Controls */}
-      <div className="absolute top-3 right-3 z-10 flex items-center gap-1 bg-black text-white rounded text-xs">
+      <div className={`absolute top-3 right-3 z-10 flex items-center gap-1 ${selected==="white"?"bg-black":"bg-white"} text-white rounded text-xs`}>
         <button
           onClick={() => setZoom((p) => Math.max(25, p - 10))}
           className="px-2 py-1 hover:bg-slate-800"
