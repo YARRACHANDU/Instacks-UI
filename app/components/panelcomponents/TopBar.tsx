@@ -40,22 +40,22 @@ export default function TopBar({ autoRun, setAutoRun, build ,selected}: Props) {
        <div className="flex items-center gap-3">
   
 
- <Link href="/problems">
+ <Link href="/problems" className="absolute top-0 left-10">
   {selected === "white" ? (
     <Image
       src="/logo-dark.png"
       alt="logo"
-      width={80}
+      width={140}
       height={60}
-      className="object-cover"
+      className="object-cover pl-3 pt-2 pb-2 pr-3"
     />
   ) : (
     <Image
       src="/logo-white.png"
       alt="logo"
-      width={80}
+      width={140}
       height={60}
-      className="object-cover"
+      className="object-cover pl-3 pt-2 pb-2 pr-3"
     />
   )}
 </Link>

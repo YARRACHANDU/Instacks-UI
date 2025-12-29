@@ -10,6 +10,7 @@ import ConsolePanel from "../../components/panelcomponents/ConsolePanel";
 import Questions from "../../components/panelcomponents/questionpanel"
 import { useParams } from "next/navigation";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
+import { useRef } from "react";
 
 export const getLang = (f: string) =>
   f.endsWith(".html") ? "html" : f.endsWith(".css") ? "css" : "javascript";
@@ -24,7 +25,17 @@ export default function InstacksEditor() {
   const [questionId, setQuestionId] = useState<number | null>(null);
   const [showConsole, setShowConsole] = useState(false);
   {/* props ki related state*/}
-  const [selected, setSelected] = useState<"white" | "black">("black");
+  const [selected, setSelected] = useState<"white" | "black">("white");
+
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [btnPos, setBtnPos] = useState({ x: 24, y: 16 });
+const dragging = useRef(false);
+const dragStart = useRef({ x: 0, y: 0 });
+const moved = useRef(false);
+const [editorWidth, setEditorWidth] = useState(600);
+const [resizeEnabled, setResizeEnabled] = useState(false);
+const isResizing = useRef(false);
+
   
 
 
@@ -90,6 +101,29 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
 <script>${js}</script>
 </body></html>`);
   };
+  const handlePointerDown = (e: React.PointerEvent) => {
+  dragging.current = true;
+  moved.current = false;
+  dragStart.current = {
+    x: e.clientX - btnPos.x,
+    y: e.clientY - btnPos.y,
+  };
+};
+
+const handlePointerMove = (e: React.PointerEvent) => {
+  if (!dragging.current) return;
+
+  moved.current = true;
+  setBtnPos({
+    x: e.clientX - dragStart.current.x,
+    y: e.clientY - dragStart.current.y,
+  });
+};
+
+const handlePointerUp = () => {
+  dragging.current = false;
+};
+
 
   useEffect(() => {
     if (!autoRun) return;
@@ -111,26 +145,79 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
     <div className="h-screen flex flex-col bg-slate-900 text-white overflow-hidden">
       <TopBar autoRun={autoRun} setAutoRun={setAutoRun} build={build} selected={selected} />
       <MobileViewToggle viewMode={viewMode} setViewMode={setViewMode} selected={selected} />
- <button
+<button
   onClick={() =>
     setSelected((s) => (s === "black" ? "white" : "black"))
   }
+  aria-label="Toggle theme"
   className={`
-    fixed bottom-162.5 right-6 z-50
-    w-17 h-7 rounded-full
-    transition-colors duration-300
-    ${selected === "black" ? "bg-white" : "bg-black"}
+    fixed z-50
+    bottom-6
+
+    /* Mobile */
+    right-1 -translate-x-1/2
+
+    /* Desktop */
+    lg:left-auto lg:right-6 lg:translate-x-0
+
+    w-10 h-10
+    rounded-full
+    backdrop-blur
+    shadow-lg
+
+    flex items-center justify-center
+    cursor-pointer
+    transition-all duration-300
+    hover:scale-105
+    ${selected==="white"?"bg-white":"bg-black"}
+
   `}
 >
-  <span
-    className={`
-      absolute top-1 left-1
-      w-5 h-5 rounded-full
-      transition-transform duration-300
-      ${selected === "black" ? "translate-x-10 bg-black" : "translate-x-0 bg-white"}
-    `}
-  />
+  {selected === "black" ? (
+    /* 🌙 Moon */
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="text-white transition-transform duration-300"
+    >
+      <path d="M21 12.79A9 9 0 0111.21 3 
+               7 7 0 1012 21 
+               9 9 0 0021 12.79z" />
+    </svg>
+  ) : (
+    /* ☀️ Sun */
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="text-black transition-transform duration-300"
+    >
+      <circle cx="12" cy="12" r="4" />
+      <line x1="12" y1="1" x2="12" y2="3" />
+      <line x1="12" y1="21" x2="12" y2="23" />
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+      <line x1="1" y1="12" x2="3" y2="12" />
+      <line x1="21" y1="12" x2="23" y2="12" />
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+    </svg>
+  )}
 </button>
+
+
+
 
 
       <div className="flex flex-1 overflow-hidden">
