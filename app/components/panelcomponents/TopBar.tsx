@@ -6,15 +6,19 @@ import {
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
 } from "@heroicons/react/24/solid";
+import Image from "next/image";
+import Link from "next/link";
 
 interface Props {
   autoRun: boolean;
   setAutoRun: (v: boolean) => void;
   build: () => void;
+ selected: "white" | "black";
 }
 
-export default function TopBar({ autoRun, setAutoRun, build }: Props) {
+export default function TopBar({ autoRun, setAutoRun, build ,selected}: Props) {
   const [isFullscreen, setIsFullscreen] = useState(false);
+
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -27,18 +31,24 @@ export default function TopBar({ autoRun, setAutoRun, build }: Props) {
   };
 
   return (
-    <div className="flex flex-col bg-white border-b border-slate-700 shadow-lg">
+      <div
+      className={`flex flex-col border-b border-slate-700 shadow-lg ${
+        selected === "white" ? "bg-white text-black" : "bg-black text-white"
+      }`}
+    >
       <div className="flex items-center justify-between px-3 py-2">
        <div className="flex items-center gap-3">
-  <div className="flex flex-row gap-1 items-center">
-    <div className="w-3 h-3 rounded-full bg-red-500" />
-    <div className="w-3 h-3 rounded-full bg-yellow-500" />
-    <div className="w-3 h-3 rounded-full bg-green-500" />
-  </div>
+  
 
-  <span className="font-semibold text-black">
-    Instacks Editor
-  </span>
+  <Link href='/problems'>
+  <Image
+            src="/logo-dark.png"
+            alt="logo"
+            width={80}
+            height={60}
+            className="object-cover w-full h-full"
+          />
+  </Link>
 </div>
 
         
@@ -54,7 +64,7 @@ export default function TopBar({ autoRun, setAutoRun, build }: Props) {
               
             />
 
-            <span style={{color:'black'}}>Auto Run</span>
+            <span className={`${selected=="black"?"text-white":"text-black"}`}>Auto Run</span>
           </label>
 
           {/* Fullscreen Button */}
@@ -64,9 +74,9 @@ export default function TopBar({ autoRun, setAutoRun, build }: Props) {
             className="p-2 rounded bg-slate-700 hover:bg-slate-600"
           >
             {isFullscreen ? (
-              <ArrowsPointingInIcon className="w-4 h-4 text-white" />
+              <ArrowsPointingInIcon className={`w-4 h-4 ${selected=="black"?"text-white":"text-black"}`} />
             ) : (
-              <ArrowsPointingOutIcon className="w-4 h-4 text-white" />
+              <ArrowsPointingOutIcon className={`w-4 h-4 ${selected=="black"?"text-white":"text-black"}`} />
             )}
           </button>
 
