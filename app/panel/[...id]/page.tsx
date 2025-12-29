@@ -11,6 +11,9 @@ import Questions from "../../components/panelcomponents/questionpanel"
 import { useParams } from "next/navigation";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
 
+// ⬇️ Newly Added Import
+import questionsData from "../../questions/questions.json";
+
 export const getLang = (f: string) =>
   f.endsWith(".html") ? "html" : f.endsWith(".css") ? "css" : "javascript";
 
@@ -24,7 +27,7 @@ export default function InstacksEditor() {
   const [questionId, setQuestionId] = useState<number | null>(null);
   const [showConsole, setShowConsole] = useState(false);
   const [selected, setSelected] = useState<"white" | "black">("black");
-  const [editorWidth, setEditorWidth] = useState(50); // percentage
+  const [editorWidth, setEditorWidth] = useState(50);
   const [isResizing, setIsResizing] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -38,22 +41,26 @@ export default function InstacksEditor() {
     }
   }, [params]);
 
-  // Check if mobile view
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768); // 768px is typical tablet breakpoint
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
   const [contents, setContents] = useState<Record<string, string>>({
     "index.html": "<h1>Hello Online Editor 🚀</h1>",
     "style.css": "h1 { color: red; }",
     "script.js": "console.log('Editor ready');",
   });
+
+  // ⬇️ Newly Added Effect (LOAD CODE FROM JSON)
+  useEffect(() => {
+    if (!questionId) return;
+    const q = questionsData.find((item) => item.id === questionId);
+    if (!q?.code) return;
+
+    setContents({
+      "index.html": q.code.html || "",
+      "style.css": q.code.css || "",
+      "script.js": q.code.js || ""
+    });
+
+    console.log("Code loaded for Question:", questionId);
+  }, [questionId]);
 
   const [srcDoc, setSrcDoc] = useState("");
   const [autoRun, setAutoRun] = useState(true);
@@ -78,9 +85,9 @@ export default function InstacksEditor() {
 
   const build = () => {
     setLogs([]);
-    const html = Object.entries(contents).find(([k]) => k.endsWith(".html"))?.[1] ?? "";
-    const css = Object.entries(contents).filter(([k]) => k.endsWith(".css")).map(([, v]) => v).join("\n");
-    const js = Object.entries(contents).filter(([k]) => k.endsWith(".js")).map(([, v]) => v).join("\n");
+    const html = contents["index.html"];
+    const css = contents["style.css"];
+    const js = contents["script.js"];
 
     setSrcDoc(`<!DOCTYPE html>
 <html>
@@ -118,76 +125,62 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
   }, []);
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (isMobile) return; // Disable resizing on mobile
+    if (isMobile) return;
     e.preventDefault();
     setIsResizing(true);
   };
 
   useEffect(() => {
-    if (isMobile) return; // Don't set up resize listeners on mobile
+    if (isMobile) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const move = (e: MouseEvent) => {
       if (!isResizing) return;
-      e.preventDefault();
-      const container = document.getElementById('editor-preview-container');
-      if (!container) return;
-      const containerRect = container.getBoundingClientRect();
-      const newWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100;
-      if (newWidth > 20 && newWidth < 80) {
-        setEditorWidth(newWidth);
-      }
+      const el = document.getElementById("editor-preview-container");
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const w = ((e.clientX - rect.left) / rect.width) * 100;
+      if (w > 20 && w < 80) setEditorWidth(w);
     };
 
-    const handleMouseUp = () => {
-      setIsResizing(false);
-    };
+    const up = () => setIsResizing(false);
 
     if (isResizing) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-      document.body.style.cursor = 'col-resize';
-      document.body.style.userSelect = 'none';
+      document.addEventListener("mousemove", move);
+      document.addEventListener("mouseup", up);
+      document.body.style.cursor = "col-resize";
     } else {
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
+      document.body.style.cursor = "";
     }
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
+      document.removeEventListener("mousemove", move);
+      document.removeEventListener("mouseup", up);
+      document.body.style.cursor = "";
     };
   }, [isResizing, isMobile]);
 
   return (
     <div className="h-screen flex flex-col bg-slate-900 text-white overflow-hidden">
       <TopBar autoRun={autoRun} setAutoRun={setAutoRun} build={build} selected={selected} />
-      
-      {/* Mobile View Toggle - Only visible on mobile */}
+
       {isMobile && (
         <MobileViewToggle viewMode={viewMode} setViewMode={setViewMode} selected={selected} />
       )}
-      
+
       <button
-        onClick={() =>
-          setSelected((s) => (s === "black" ? "white" : "black"))
-        }
-        className={`
-    fixed bottom-162 right-6 z-50
-    w-17 h-7 rounded-full
-    transition-colors duration-300
-    ${selected === "black" ? "bg-black" : "bg-gray-300"}
-  `}
+        onClick={() => setSelected((s) => (s === "black" ? "white" : "black"))}
+        aria-label="Toggle theme"
+        className={`fixed z-50 bottom-6 right-1 lg:right-6 w-10 h-10 rounded-full backdrop-blur shadow-lg flex items-center justify-center transition-all duration-300 ${selected==="white"?"bg-white":"bg-black"}`}
       >
-        <span
-          className={`
-      absolute top-1 left-1
-      w-5 h-5 rounded-full bg-white
-      transition-transform duration-300
-      ${selected === "black" ? "translate-x-10" : "translate-x-0"}
-    `}
-        />
+        {selected === "black" ? (
+          <svg width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" className="text-white">
+            <path d="M21 12.79A9 9 0 0111.21 3A7 7 0 1012 21A9 9 0 0021 12.79z" />
+          </svg>
+        ) : (
+          <svg width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" className="text-black">
+            <circle cx="12" cy="12" r="4" />
+          </svg>
+        )}
       </button>
 
       <div className="flex flex-1 overflow-hidden">
@@ -197,100 +190,38 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
           <Tabs files={files} activeFile={activeFile} setActiveFile={setActiveFile} selected={selected} />
 
           <div id="editor-preview-container" className="flex flex-1 overflow-hidden relative">
-            {/* Mobile View - Toggle between editor and preview */}
-            {isMobile ? (
-              <>
-                {viewMode === "editor" && (
-                  <div className="flex flex-col w-full h-full">
-                    <EditorPane
-                      viewMode={viewMode}
-                      activeFile={activeFile}
-                      contents={contents}
-                      setContents={setContents}
-                      fontSize={fontSize}
-                      setFontSize={setFontSize}
-                      selected={selected}
-                    />
-                  </div>
-                )}
-                {viewMode === "preview" && (
-                  <div className="flex flex-col w-full h-full">
-                    <PreviewPane 
-                      viewMode={viewMode} 
-                      srcDoc={srcDoc} 
-                      zoom={zoom} 
-                      setZoom={setZoom} 
-                      selected={selected} 
-                    />
-                  </div>
-                )}
-              </>
-            ) : (
-              /* Desktop/Tablet View - Split view with resizer */
-              <>
-                {/* Editor Panel */}
-                <div 
-                  className="flex flex-col"
-                  style={{ 
-                    width: `${editorWidth}%`, 
-                    height: '100%'
-                  }}
-                >
-                  <EditorPane
-                    viewMode={viewMode}
-                    activeFile={activeFile}
-                    contents={contents}
-                    setContents={setContents}
-                    fontSize={fontSize}
-                    setFontSize={setFontSize}
-                    selected={selected}
-                  />
-                </div>
-                
-                {/* Resizer - Only visible on desktop/tablet */}
-                {!isMobile && (
-                  <div
-                    onMouseDown={handleMouseDown}
-                    className={`w-1 bg-gray-700 hover:bg-blue-500 cursor-col-resize transition-colors ${isResizing ? 'bg-blue-500' : ''}`}
-                    style={{ 
-                      flexShrink: 0, 
-                      height: '100%', 
-                      zIndex: 10 
-                    }}
-                  />
-                )}
-                
-                {/* Preview Panel */}
-                <div 
-                  className="flex flex-col"
-                  style={{ 
-                    width: `${100 - editorWidth}%`, 
-                    height: '100%'
-                  }}
-                >
-                  <PreviewPane 
-                    viewMode={viewMode} 
-                    srcDoc={srcDoc} 
-                    zoom={zoom} 
-                    setZoom={setZoom} 
-                    selected={selected} 
-                  />
-                </div>
+            <div className="flex flex-col" style={{ width: `${editorWidth}%` }}>
+              <EditorPane
+                viewMode={viewMode}
+                activeFile={activeFile}
+                contents={contents}
+                setContents={setContents}
+                fontSize={fontSize}
+                setFontSize={setFontSize}
+                selected={selected}
+              />
+            </div>
 
-                {/* Overlay to prevent interaction during resize */}
-                {isResizing && (
-                  <div 
-                    className="absolute inset-0 z-20" 
-                    style={{ cursor: 'col-resize' }}
-                  />
-                )}
-              </>
+            {!isMobile && (
+              <div
+                onMouseDown={handleMouseDown}
+                className={`w-1 bg-gray-700 hover:bg-blue-500 cursor-col-resize transition-colors ${isResizing ? "bg-blue-500" : ""}`}
+                style={{ height: "100%" }}
+              />
+            )}
+
+            <div className="flex flex-col" style={{ width: `${100 - editorWidth}%` }}>
+              <PreviewPane srcDoc={srcDoc} viewMode={viewMode} zoom={zoom} setZoom={setZoom} selected={selected} />
+            </div>
+
+            {isResizing && (
+              <div className="absolute inset-0 z-20" style={{ cursor: 'col-resize' }} />
             )}
           </div>
 
           <button
             onClick={() => setShowConsole(prev => !prev)}
-            className="px-3 py-1 bg-gray-800 text-white rounded text-sm hover:bg-gray-700 transition"
+            className="px-3 py-1 bg-gray-800 rounded hover:bg-gray-700 text-sm"
           >
             {showConsole ? "Hide Console" : "Show Console"}
           </button>
@@ -298,11 +229,12 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
           {showConsole && (
             <ConsolePanel
               logs={logs}
-              clearLogs={() => setLogs([])} selected={"white"}            />
+              clearLogs={() => setLogs([])}
+              selected={"white"}
+            />
           )}
         </div>
       </div>
     </div>
   );
 }
-

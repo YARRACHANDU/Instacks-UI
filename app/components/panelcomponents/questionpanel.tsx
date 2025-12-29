@@ -50,17 +50,28 @@ export default function QuestionPanel({ questionId,selected }: Props) {
       {/* 🔹 MOBILE OVERLAY PANEL */}
       {open && (
         <div className="fixed inset-0 z-50 bg-black/40 md:hidden">
-          <div className="absolute left-0 top-0 h-full w-80 bg-white shadow-xl overflow-y-auto">
+          <div
+  className={`absolute left-0 top-0 h-full w-80 shadow-xl overflow-y-auto ${
+    selected === "black" ? "bg-black" : "bg-white"
+  }`}
+>
+
             
             {/* Header */}
             <div className="p-3 border-b flex justify-between items-center">
-              <span className="font-semibold text-black">Question</span>
+              <span className={`font-semibold ${selected==="black" ? "text-white" : "text-black"}`}>
+  Question
+</span>
+
               <button
                 onClick={() => setOpen(false)}
                 title="Close"
                 className="p-2 rounded hover:bg-gray-100"
               >
-                <XMarkIcon className="w-5 h-5 text-black" />
+               <XMarkIcon
+  className={`w-5 h-5 ${selected==="black" ? "text-white" : "text-black"}`}
+/>
+
               </button>
             </div>
 
@@ -97,7 +108,12 @@ function QuestionContent({
         {question.title}
       </h2>
 
-      <div className="rounded-lg overflow-hidden bg-gray-100 h-36 lg:h-40">
+      <div
+  className={`rounded-lg overflow-hidden h-36 lg:h-40 ${
+    selected==="black" ? "bg-gray-800" : "bg-gray-100"
+  }`}
+>
+
         <Image
           src={`/${question.id}.jpg`}
           alt={question.title}
@@ -110,15 +126,18 @@ function QuestionContent({
       <p className={`text-sm md:text-base ${selected=="black"?"text-white":"text-black"}  leading-relaxed`}>
         {question.problemOverview}
       </p>
+<hr className={selected==="black" ? "border-gray-700" : "border-gray-200"} />
 
-      <hr />
 
       <Section title="Requirements" items={question.requirements} selected={selected}/>
-      <hr />
+      <hr className={selected==="black" ? "border-gray-700" : "border-gray-200"} />
+
       <Section title="Objectives" items={question.objectives} selected={selected}/>
-      <hr />
+      <hr className={selected==="black" ? "border-gray-700" : "border-gray-200"} />
+
       <Section title="Attributes" items={question.attributes} selected={selected}/>
-      <hr />
+      <hr className={selected==="black" ? "border-gray-700" : "border-gray-200"} />
+
 
       <div>
         <h3 className={`font-semibold mb-1 ${selected=="black"?"text-white":"text-black"}`}>
