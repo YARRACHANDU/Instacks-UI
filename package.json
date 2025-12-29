@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@column-resizer/react": "^1.4.0",
     "@heroicons/react": "^2.2.0",
     "@monaco-editor/react": "^4.7.0",
     "lucide-react": "^0.562.0",
@@ -18,7 +19,11 @@
     "react-dom": "19.2.3",
     "react-resizable-panels": "^4.0.16",
     "react-split-pane": "^3.0.4",
-    "react-split-pane-next": "^1.0.6"
+    "react-split-pane-next": "^1.0.6",
+    "react-split": "^2.0.14",
+    "react-resizable": "^3.0.5",
+    "react-resizable-panels": "^4.0.15",
+    "react-split-pane": "^3.0.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
