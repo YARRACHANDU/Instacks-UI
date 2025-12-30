@@ -34,7 +34,7 @@ export default function ProblemsPage() {
         <div className="max-w-7xl mx-auto px-4 md:px-6">
 
           {/* FILTER BUTTONS - Sticky & Transparent */}
-          <div className="sticky top-[70px] z-40 flex justify-center gap-2 md:gap-4 flex-wrap py-2 mb-8 md:mb-10 bg-transparent">
+          <div className="sticky top-70px z-40 flex justify-center gap-2 md:gap-4 flex-wrap py-2 mb-8 md:mb-10 bg-transparent">
             {["all", "basic", "medium", "hard"].map((level) => (
               <button
                 key={level}
