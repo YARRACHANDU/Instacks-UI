@@ -50,7 +50,7 @@ export default function EditorPane({
               flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium
               transition-all duration-200
               ${isFormatted 
-                ? 'bg-emerald-600 hover:bg-emerald-700 text-white' 
+                ? 'bg-blue-600 hover:bg-blue-700 text-white' 
                 : selected === "white"
                   ? 'bg-slate-200 hover:bg-slate-300 text-black'
                   : 'bg-slate-700 hover:bg-slate-600 text-white'
@@ -62,7 +62,7 @@ export default function EditorPane({
               <path d="M12 3l9 4.5v9L12 21l-9-4.5v-9L12 3z"/>
               <path d="M12 12l9-4.5M12 12v9M12 12L3 7.5"/>
             </svg>
-            {isFormatted ? "✓" : "Format"}
+            {isFormatted ? "Align OF" : "Align ON"}
           </button>
 
           {/* Font size controls */}
@@ -82,9 +82,7 @@ export default function EditorPane({
             </button>
           </div>
 
-          <span className={`px-2 py-1 ${selected==="white"?"bg-black text-white":"bg-white text-black"} rounded text-xs uppercase font-semibold`}>
-            {getLang(activeFile)}
-          </span>
+          
         </div>
       </div>
 
