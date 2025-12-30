@@ -1,3 +1,4 @@
+"use client"
 interface Props {
   viewMode: "editor" | "preview";
   srcDoc: string;
@@ -5,6 +6,7 @@ interface Props {
   setZoom: (v: number | ((p: number) => number)) => void;
   selected:"white"|"black"
 }
+
 
 export default function PreviewPane({
   viewMode,
