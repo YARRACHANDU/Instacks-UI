@@ -73,9 +73,11 @@ export default function EditorPane({
             ...contents,
             [activeFile]: value ?? "",
           })
+          
         }
         options={{
           fontSize,
+          fontFamily: "Menlo, Monaco, 'Cascadia Code', 'Fira Code', Consolas, monospace",
           minimap: { enabled: false },
           wordWrap: "on",
           scrollBeyondLastLine: false,

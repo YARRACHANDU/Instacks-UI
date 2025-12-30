@@ -95,18 +95,18 @@ export default function TopBar({ autoRun, setAutoRun, build ,selected ,question}
             className="p-2 rounded bg-slate-700 hover:bg-slate-600"
           >
             {isFullscreen ? (
-              <ArrowsPointingInIcon className={`w-4 h-4 ${selected=="black"?"text-white":"text-black"}`} />
+              <ArrowsPointingInIcon className={`w-4 h-4 ${selected=="black"?"text-white":"text-white"}`} />
             ) : (
-              <ArrowsPointingOutIcon className={`w-4 h-4 ${selected=="black"?"text-white":"text-black"}`} />
+              <ArrowsPointingOutIcon className={`w-4 h-4 ${selected=="black"?"text-white":"text-white"}`} />
             )}
           </button>
 
           {/* Run Button */}
           <button
             onClick={build}
-            className="flex items-center gap-2 bg-green-600 hover:bg-green-500 px-4 py-1.5 rounded text-xs font-semibold"
+            className={`flex items-center gap-2 bg-green-600 hover:bg-green-500 px-4 py-1.5 rounded text-xs font-semibold ${selected=="black"?"text-white":"text-white"}`}
           >
-            <PlayIcon className="w-4 h-4" />
+            <PlayIcon className={`w-4 h-4 ${selected=="black"?"text-white":"text-white"}`}  />
             Run
           </button>
         </div>

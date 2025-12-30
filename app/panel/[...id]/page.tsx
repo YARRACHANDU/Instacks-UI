@@ -72,21 +72,45 @@ export default function InstacksEditor() {
   const [viewMode, setViewMode] = useState<"editor" | "preview">("editor");
   const [zoom, setZoom] = useState(100);
   const [fontSize, setFontSize] = useState(14);
+  const [formatEnabled, setFormatEnabled] = useState(true);
+
+
+  // --- Simple formatters for learning editor ---
+
+const formatHTML = (html: string) => {
+  return html
+    .replace(/></g, ">\n<")
+    .replace(/^\s*/gm, "")
+    .trim();
+};
+
+const formatCSS = (css: string) => {
+  return css
+    .replace(/{/g, " {\n  ")
+    .replace(/;/g, ";\n  ")
+    .replace(/}/g, "\n}\n")
+    .replace(/\n\s*\n/g, "\n")
+    .trim();
+};
+
 
   // ⬇️ ADDED: Load HTML/CSS/JS for that question ID
-  useEffect(() => {
-    if (!questionId) return;
-    const question = questionsData.find(q => q.id === questionId);
-    if (!question?.code) return;
+useEffect(() => {
+  if (!questionId) return;
 
-    setContents({
-      "index.html": question.code.html || "<!-- Write HTML here -->",
-      "style.css": question.code.css || "/* Write CSS here */",
-      "script.js": question.code.js || "// Write JS here"
-    });
+  const question = questionsData.find(q => q.id === questionId);
+  if (!question?.code) return;
 
-    console.log("Loaded code for question:", questionId);
-  }, [questionId]);
+  setContents({
+    "index.html": question.code.html,
+
+    "style.css": question.code.css,
+
+    "script.js": question.code.js || "// Write JS here",
+  });
+}, [questionId, formatEnabled]);
+
+
 
   const addFile = () => {
     const fileName = prompt("Enter file name");
@@ -235,6 +259,7 @@ useEffect(() => {
   return (
     <div className="h-screen flex flex-col bg-slate-900 text-white overflow-hidden">
       <TopBar autoRun={autoRun} setAutoRun={setAutoRun} build={build} selected={selected} question={question} />
+
       
       
       {isMobile && (
