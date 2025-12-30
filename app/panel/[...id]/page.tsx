@@ -33,15 +33,12 @@ export default function InstacksEditor() {
   const [editorWidth, setEditorWidth] = useState(50); 
   const [isResizing, setIsResizing] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-<<<<<<< HEAD
   const [capturedImg, setCapturedImg] = useState<string | null>(null);
 
   const question =
   questions.find(q => q.id === questionId) || null;
-=======
   const [scoreInfo, setScoreInfo] = useState<any>(null);
 
->>>>>>> 64cbeb90466cf1362e5f12c1f90d5e07c909fed4
 
   const params = useParams();
 
