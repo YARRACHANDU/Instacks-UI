@@ -64,12 +64,13 @@ export default function TopBar({ autoRun, setAutoRun, build ,selected ,question}
 
 </div>
 {question && (
-  <div className="hidden md:flex justify-center">
+  <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2">
     <h1 className="text-sm font-semibold text-center">
       {question.title}
     </h1>
   </div>
 )}
+
 
 
         

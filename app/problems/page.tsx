@@ -161,7 +161,7 @@ export default function ProblemsPage() {
               </p>
 
               <Link href={`/panel/${selected.id}`}>
-                <button className="w-full bg-black text-white py-3 rounded-lg text-sm font-semibold">
+                <button className="w-full bg-black cursor-pointer text-white py-3 rounded-lg text-sm font-semibold">
                   Start Solving →
                 </button>
               </Link>
