@@ -189,18 +189,7 @@ useEffect(() => {
   const question = questionsData.find(q => q.id === questionId);
   if (!question?.code) return;
 
-  setContents({
-    "index.html": question.code.html,
-
-    "style.css": question.code.css,
-
-    "script.js": question.code.js || "// Write JS here",
-  });
-}, [questionId, formatEnabled]);
-
-<<<<<<< HEAD
-=======
-    const loadedContents = {
+  const loadedContents = {
       "index.html": question.code.html || "<!-- Write HTML here -->",
       "style.css": question.code.css || "/* Write CSS here */",
       "script.js": question.code.js || "// Write JS here"
@@ -208,8 +197,9 @@ useEffect(() => {
 
     setContents(loadedContents);
     setOriginalContents(loadedContents); // Store original for format toggle
-    setIsFormatted(false); // Reset format state
->>>>>>> 344c161e7335806126559771e347f38eaca2a3d0
+    setIsFormatted(false);
+}, [questionId, formatEnabled]);
+ // Reset format state
 
 
   const addFile = () => {
@@ -375,11 +365,6 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
 
   return (
     <div className="h-screen flex flex-col bg-slate-900 text-white overflow-hidden">
-<<<<<<< HEAD
-      <TopBar autoRun={autoRun} setAutoRun={setAutoRun} build={build} selected={selected} question={question} />
-
-      
-=======
       <TopBar 
         autoRun={autoRun} 
         setAutoRun={setAutoRun} 
@@ -387,7 +372,6 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
         selected={selected} 
         question={question} 
       />
->>>>>>> 344c161e7335806126559771e347f38eaca2a3d0
       
       {isMobile && (
         <MobileViewToggle viewMode={viewMode} setViewMode={setViewMode} selected={selected} />
