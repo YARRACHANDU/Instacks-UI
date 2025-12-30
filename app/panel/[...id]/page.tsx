@@ -10,6 +10,9 @@ import ConsolePanel from "../../components/panelcomponents/ConsolePanel";
 import Questions from "../../components/panelcomponents/questionpanel";
 import { useParams } from "next/navigation";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
+import html2canvas from "html2canvas";
+import questions from "../../questions/questions.json";
+
 
 // ⬇️ ADDED: load Q data
 import questionsData from "../../questions/questions.json";
@@ -30,6 +33,10 @@ export default function InstacksEditor() {
   const [editorWidth, setEditorWidth] = useState(50); 
   const [isResizing, setIsResizing] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [capturedImg, setCapturedImg] = useState<string | null>(null);
+
+  const question =
+  questions.find(q => q.id === questionId) || null;
   const [scoreInfo, setScoreInfo] = useState<any>(null);
 
 
@@ -88,7 +95,28 @@ export default function InstacksEditor() {
     setContents({ ...contents, [fileName]: "" });
     setActiveFile(fileName);
   };
+const captureOutput = async () => {
+  const iframe = document.getElementById("preview-iframe") as HTMLIFrameElement;
+  if (!iframe) {
+    alert("Preview not found");
+    return;
+  }
 
+  const iframeDoc = iframe.contentDocument;
+  if (!iframeDoc) {
+    alert("Preview not ready");
+    return;
+  }
+
+  const canvas = await html2canvas(iframeDoc.body, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: null,
+  });
+
+  const img = canvas.toDataURL("image/png");
+  setCapturedImg(img);
+};
   const deleteFile = (name: string) => {
     const htmlFiles = files.filter(f => f.name.endsWith(".html"));
     if (name.endsWith(".html") && htmlFiles.length === 1) return;
@@ -206,7 +234,8 @@ useEffect(() => {
 
   return (
     <div className="h-screen flex flex-col bg-slate-900 text-white overflow-hidden">
-      <TopBar autoRun={autoRun} setAutoRun={setAutoRun} build={build} selected={selected} />
+      <TopBar autoRun={autoRun} setAutoRun={setAutoRun} build={build} selected={selected} question={question} />
+      
       
       {isMobile && (
         <MobileViewToggle viewMode={viewMode} setViewMode={setViewMode} selected={selected} />
@@ -341,6 +370,7 @@ useEffect(() => {
               </>
             )}
           </div>
+          
 
           <button
             onClick={() => setShowConsole(prev => !prev)}
