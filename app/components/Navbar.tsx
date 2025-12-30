@@ -82,8 +82,7 @@ const Navbar = () => {
         {/* Desktop Menu */}
         <ul className="hidden md:flex gap-10 font-semibold text-black">
           <li><Link href="/problems" className="hover:text-rose-500">Problems</Link></li>
-          <li><Link href="#about-us" className="hover:text-rose-500">About Us</Link></li>
-          <li><Link href="#contact" className="hover:text-rose-500">Contact Us</Link></li>
+          
         </ul>
 
         {/* Mobile Menu Toggle */}
@@ -99,8 +98,7 @@ const Navbar = () => {
       {open && (
         <ul className="md:hidden flex flex-col items-center gap-6 bg-white text-black py-6 shadow-md border-t">
           <li><Link href="/problems" onClick={() => setOpen(false)}>Problems</Link></li>
-          <li><Link href="#about-us" onClick={() => setOpen(false)}>About Us</Link></li>
-          <li><Link href="#contact" onClick={() => setOpen(false)}>Contact Us</Link></li>
+          
         </ul>
       )}
     </nav>

@@ -30,6 +30,8 @@ export default function InstacksEditor() {
   const [editorWidth, setEditorWidth] = useState(50); 
   const [isResizing, setIsResizing] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [scoreInfo, setScoreInfo] = useState<any>(null);
+
 
   const params = useParams();
 
@@ -49,6 +51,7 @@ export default function InstacksEditor() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
 
   const [contents, setContents] = useState<Record<string, string>>({
     "index.html": "<h1>Hello Online Editor 🚀</h1>",
@@ -161,6 +164,45 @@ window.onerror=(m,s,l,c)=>send("error",[m+" ("+l+":"+c+")"]);
       document.body.style.userSelect = '';
     };
   }, [isResizing, isMobile]);
+
+  // ⛔ Block copy, paste, cut and right-click globally
+useEffect(() => {
+  const prevent = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+   
+  };
+
+  window.addEventListener("copy", prevent);
+  window.addEventListener("cut", prevent);
+  window.addEventListener("paste", prevent);
+  window.addEventListener("contextmenu", prevent);
+
+  return () => {
+    window.removeEventListener("copy", prevent);
+    window.removeEventListener("cut", prevent);
+    window.removeEventListener("paste", prevent);
+    window.removeEventListener("contextmenu", prevent);
+  };
+}, []);
+
+// ⛔ Block keyboard shortcuts: Ctrl+V / Ctrl+C / Ctrl+X
+useEffect(() => {
+  const keyBlock = (e: KeyboardEvent) => {
+    if (
+      (e.ctrlKey || e.metaKey) &&
+      ["v", "c", "x", "V", "C", "X"].includes(e.key)
+    ) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+    }
+  };
+
+  document.addEventListener("keydown", keyBlock);
+  return () => document.removeEventListener("keydown", keyBlock);
+}, []);
+
 
   return (
     <div className="h-screen flex flex-col bg-slate-900 text-white overflow-hidden">
