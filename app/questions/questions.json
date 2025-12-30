@@ -59,7 +59,9 @@
       "html": "<button class='btn'>Click Me</button>",
       "css": ".btn {padding: 10px 20px;  cursor: pointer; font-size: 16px;} ",
       "js": "// (Not required)"
-    }
+    },
+    "selector": "button"
+
   },
   {
     "id": 3,

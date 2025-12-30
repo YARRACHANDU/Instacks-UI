@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div>
       <Navbar />
-      <main className="min-h-screen bg-white dark:bg-white text-white dark:text-black transition-colors duration-500 pt-6">
+      <main className="min-h-screen bg-white dark:bg-white text-black dark:text-black transition-colors duration-500 pt-6">
 
       {/* HERO SECTION */}
       <section className="flex items-center px-6 py-16">
@@ -65,9 +65,9 @@ export default function Home() {
 
       {/* UI PRACTICE SECTION */}
       {/* TOP PROBLEMS SECTION */}
-<section className="px-6 py-20 bg-gradient-to-b from-black/95 to-black text-white dark:from-white dark:to-white dark:text-black transition-colors">
+<section className="px-6 py-20 bg-white text-black transition-colors">
   <div className="max-w-6xl mx-auto text-center">
-
+    
     {/* Language Icons */}
     <div className="flex justify-center gap-8 mb-8">
       <img src="/html.png" alt="HTML" className="h-16 w-16" />
@@ -76,15 +76,19 @@ export default function Home() {
     </div>
 
     {/* Title */}
-    <h2 className="text-4xl md:text-5xl font-bold">
-      Practice UI with <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">Live Code</span>
+    <h2 className="text-4xl md:text-5xl font-bold text-black">
+      Practice UI with{" "}
+      <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">
+        Live Code
+      </span>
     </h2>
 
     {/* Subtitle */}
-    <p className="mt-4 text-lg text-zinc-400 dark:text-zinc-600">
+    <p className="mt-4 text-lg text-gray-600">
       HTML Challenges. CSS Styling. JavaScript Logic.
       <br />
-      Supercharged with <span className="text-rose-500 font-semibold">Live Preview Mode.</span>
+      Supercharged with{" "}
+      <span className="text-rose-500 font-semibold">Live Preview Mode.</span>
     </p>
 
     {/* Button */}
@@ -96,6 +100,7 @@ export default function Home() {
 
   </div>
 </section>
+
 {/* WHAT MAKES US UNIQUE SECTION */}
 {/* WHAT MAKES US UNIQUE SECTION */}
 <section className="px-6 py-2 bg-white text-black transition-colors">
