@@ -108,9 +108,9 @@ export default function QuestionPanel({ questionId, selected }: Props) {
         style={{ width: `${width}px` }}
       >
         {/* 🔙 Back Button */}
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <BackButton selected={selected} />
-        </div>
+        </div> */}
 
         <QuestionContent
           question={question}
